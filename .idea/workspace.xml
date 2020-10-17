@@ -11,19 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d9aba32e-ff1d-44b5-a839-2f659c374c3e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.cache/18/dcf71492113c7cf7f9f5a3b2f7a186.json" beforeDir="false" afterPath="$PROJECT_DIR$/.cache/18/dcf71492113c7cf7f9f5a3b2f7a186.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.cache/34/59e05511725addad45be22864deed8.json" beforeDir="false" afterPath="$PROJECT_DIR$/.cache/34/59e05511725addad45be22864deed8.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.cache/bc/cbe15a756f77c6a2e9fcfe1cfe0106.json" beforeDir="false" afterPath="$PROJECT_DIR$/.cache/bc/cbe15a756f77c6a2e9fcfe1cfe0106.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/styles.956d002c.css" beforeDir="false" afterPath="$PROJECT_DIR$/dist/styles.956d002c.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/styles.956d002c.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/dist/styles.956d002c.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/styles.956d002c.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/styles.956d002c.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/styles.956d002c.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/dist/styles.956d002c.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +34,11 @@
     <property name="settings.editor.selected.configurable" value="terminal" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\danii\WebstormProjects\Sorting Visualisation" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -54,7 +48,7 @@
       <option name="presentableId" value="Default" />
       <updated>1602944638169</updated>
       <workItem from="1602944639348" duration="1115000" />
-      <workItem from="1602945769783" duration="5636000" />
+      <workItem from="1602945769783" duration="5814000" />
     </task>
     <servers />
   </component>
