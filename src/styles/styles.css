@@ -9,7 +9,7 @@ body{
 }
 header{
     background-color: #222;
-    height: 10vh;
+    height: auto;
     color: #aaa;
     font-family: Arial sans-serif;
     font-size: 1.5rem;
@@ -19,12 +19,18 @@ header{
     height: 100%;
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .menu_item{
     cursor: default;
     user-select: none;
+    border: 1px solid white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .visualizer{
@@ -36,4 +42,16 @@ header{
     background-color: #333;
 }
 
+#slider{
+    color: #333333;
+    background: red;
+    border: solid 1px darkred;
+    border-radius: 8px;
+    height: 18px;
+    max-width: 100%;
+    min-width: 100px;
+    outline: none;
+    transition: background 450ms ease-in;
+    -webkit-appearance: none;
+}
 
