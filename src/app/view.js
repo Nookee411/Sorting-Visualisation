@@ -4,19 +4,31 @@ export class Visualizer{
         this.visualizer = document.getElementById('visualizer');
         this.newArrayButton = document.getElementById('newArray');
         this.slider = document.getElementById('slider');
+        this.sortButton = document.getElementById('sortButton');
     }
 
     redrawVisual(array){
         this.visualizer.innerHTML ='';
-        array.forEach((height)=>this.visualizer.appendChild(createColumn(height)));
+        array.forEach((height)=>{
+        let column = createColumn(this.visualizer.clientWidth/array.length, height);
+            if(this.visualizer.clientWidth/array.length>40) {
+            column.innerText = height;
 
-        function createColumn(height){
+        }
+        this.visualizer.appendChild(column);
+        })
+
+
+        function createColumn(width, height){
             let column = document.createElement("div");
             column.style.height = height +'px';
-            column.style.width = '10px';
+            column.style.width = width +'px';
             column.style.backgroundColor = 'red';
             column.style.marginLeft = '3px';
-            column.style.borderRadius = "5px";
+            column.style.borderRadius = width/3+"px";
+            column.style.display = 'flex';
+            column.style.justifyContent = 'center';
+            column.style.alignItems = 'center';
             return column;
         }
     }
