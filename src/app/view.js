@@ -7,17 +7,18 @@ export class Visualizer{
         this.sortButton = document.getElementById('sortButton');
     }
 
-    redrawVisual(array){
+    redrawVisual(array, highlight){
         this.visualizer.innerHTML ='';
-        array.forEach((height)=>{
+        for (let i = 0; i < array.length; i++){
+            let height = array[i];
+
         let column = createColumn(this.visualizer.clientWidth/array.length, height);
-            if(this.visualizer.clientWidth/array.length>40) {
-            column.innerText = height;
-
+            if(this.visualizer.clientWidth/array.length>40)
+                column.innerText = height;
+            if(i === highlight)
+                column.style.backgroundColor = "yellow";
+            this.visualizer.appendChild(column);
         }
-        this.visualizer.appendChild(column);
-        })
-
 
         function createColumn(width, height){
             let column = document.createElement("div");

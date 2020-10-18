@@ -1,4 +1,5 @@
-import {Sort} from "./model";
+import 'regenerator-runtime/runtime';
+import {Sort, SortEvent} from "./model";
 import {Visualizer} from "./view";
 
 let sort = new Sort(10);
@@ -7,9 +8,10 @@ let currentSize = 50;
 
 vis.redrawVisual(sort.getArray())
 
-sort.addEventListener('change',()=>{
-    vis.redrawVisual(sort.getArray());
+sort.addEventListener(SortEvent.ItemsSorted, (params) => {
+    vis.redrawVisual(sort.getArray(), params.indexTwo);
 })
+
 vis.slider.addEventListener('input',(e)=>{
     currentSize = vis.slider.value;
     sort.setSize(currentSize);
@@ -22,5 +24,6 @@ vis.newArrayButton.addEventListener('click',(e)=>{
 })
 
 vis.sortButton.addEventListener('click',(e)=>{
-    sort.bubbleSort();
+    sort.bubbleSort()
+    vis.redrawVisual(sort.getArray())
 })

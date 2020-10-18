@@ -1,9 +1,11 @@
+export const SortEvent = {
+    ItemsSorted: 'ITEMS_SORTED',
+};
 
-export class Sort extends EventTarget{
+export class Sort{
     constructor(n) {
-        super();
         this.array = this.initArray(n);
-        this.arrayChangeEvent = new CustomEvent('change',{'changedIndex1': 0,'changedIndex2' : 0});
+        this.events = {};
 
     }
     initArray(size){
@@ -29,17 +31,36 @@ export class Sort extends EventTarget{
         this.array = this.initArray(this.array.length);
     }
 
-    async bubbleSort(){
+    async bubbleSort() {
         for (let i = 0; i < this.array.length; i++) {
-            for (let j = 0; j < this.array.length; j++) {
-                if(this.array[i]<this.array[j]){
-                    [this.array[i],this.array[j]] = [this.array[j],this.array[i]];
-                    this.arrayChangeEvent.changedIndex1 = i;
-                    this.arrayChangeEvent.changedIndex2 = j;
-                    dispatchEvent(this.arrayChangeEvent);
-                    await new Promise(r => setTimeout(r, 2000));
+            for (let j = 0; j < this.array.length - i - 1; j++) {
+                if (this.array[j] > this.array[j + 1]) {
+                    [this.array[j], this.array[j + 1]] = [
+                        this.array[j + 1],
+                        this.array[j],
+                    ];
+                    this.dispatch(SortEvent.ItemsSorted, {
+                        indexOne: j,
+                        indexTwo: j + 1,
+                    });
+                    await new Promise((res) => setTimeout(res, 10));
                 }
             }
+        }
+    }
+
+    addEventListener(event, callback) {
+        this.events[event] = callback;
+    }
+
+    removeEventListener(event) {
+        delete this.events[event];
+    }
+
+    dispatch(event, params) {
+        const callback = this.events[event];
+        if (callback) {
+            callback(params);
         }
     }
 
