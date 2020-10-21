@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "moment": "^2.29.1",
     "regenerator-runtime": "^0.13.7"
   }
 }

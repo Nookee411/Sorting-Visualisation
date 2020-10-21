@@ -16,7 +16,7 @@
         <div class="menu_item" id = "newArray">New array</div>
         <div class="menu_item" id = "sortButton">Sort</div>
         <div class="menu_item">
-            <label for="slider"><input id="slider" type="range" max="50" min="2"></label>
+            <label for="slider"><input id="slider" type="range" max="100" min="2"></label>
         </div>
     </div>
 </header>
@@ -24,6 +24,18 @@
 <div class="wrapper">
         <div class="visualizer" id = "visualizer"></div>
 </div>
+<footer>
+    <div class="statusBar">
+        <div class="statusBar_item">
+            <div class="statusBar__text">Steps: </div>
+            <div class="statusBar__value"  id = 'shiftsValue'>0</div>
+        </div>
+        <div class="statusBar_item">
+            <div class="statusBar__text">Time: </div>
+            <div class="statusBar__value" id = 'timerValue'>00:00</div>
+        </div>
+    </div>
+</footer>
 <script src="src/app/index.js"></script>
 </body>
 </html>

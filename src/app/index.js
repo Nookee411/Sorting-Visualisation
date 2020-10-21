@@ -1,29 +1,45 @@
 import 'regenerator-runtime/runtime';
-import {Sort, SortEvent} from "./model";
-import {Visualizer} from "./view";
+import {Sort, SortEvent} from "./model/core/model";
+import {Visualizer} from "./view/view";
 
-let sort = new Sort(10);
+//TODO Add timer
+//TODO Add shift counter
 let vis = new Visualizer();
-let currentSize = 50;
+let currentSize = vis.slider.value;
+let sort = new Sort(currentSize);
 
 vis.redrawVisual(sort.getArray())
 
 sort.addEventListener(SortEvent.ItemsSorted, (params) => {
     vis.redrawVisual(sort.getArray(), params.indexTwo);
+    vis.updateCounter()
+})
+
+sort.addEventListener(SortEvent.SortingFinished,(params)=>{
+    vis.redrawVisual((sort.getArray()))
+    vis.timer.stop()
 })
 
 vis.slider.addEventListener('input',(e)=>{
-    currentSize = vis.slider.value;
-    sort.setSize(currentSize);
-    vis.redrawVisual(sort.getArray());
+   newArray()
 })
 
 vis.newArrayButton.addEventListener('click',(e)=>{
-    sort.remakeArray();
-    vis.redrawVisual(sort.getArray());
+    newArray()
 })
 
 vis.sortButton.addEventListener('click',(e)=>{
-    sort.bubbleSort()
-    vis.redrawVisual(sort.getArray())
+    if(!sort.isSorting) {
+        vis.timer.start()
+        sort.bubbleSort()
+    }
 })
+
+function newArray(){
+    sort.isSorting = false;
+    vis.resetCounter()
+    currentSize = vis.slider.value;
+    sort.remakeArray(currentSize);
+    console.log(sort.getArray().length);
+    vis.redrawVisual(sort.getArray());
+}
