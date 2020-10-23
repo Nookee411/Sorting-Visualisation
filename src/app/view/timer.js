@@ -4,23 +4,23 @@ export const TimerEvents = {
 };
 export class Timer{
     interval
-    startTime
+    elapsedTime
     constructor() {
         this.events = {}
 
     }
 
     start(){
-        if(!this.startTime)
-            this.startTime = Date.now()
-        this.interval = setInterval(()=>
+        this.elapsedTime = 0;
+        this.interval = setInterval(()=>{
+            this.elapsedTime+=100;
             this.dispatch(TimerEvents.tick,
-                {msFromStart: (Date.now() -this.startTime),
-                         timeFromStart: this.startTime
-                } ),100)
+                {elapsedTime: this.elapsedTime,}
+                )},100)
     }
 
     stop(){
+        this.elapsedTime =0;
         clearInterval(this.interval)
     }
 

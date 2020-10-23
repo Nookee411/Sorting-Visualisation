@@ -12,11 +12,17 @@
 <body>
 <header>
     <div class="menu">
-        <div class="menu_item">Algorithm</div>
+        <div class= "menu_item foldMenu">
+            <div class="foldMenu__name">Algorithm</div>
+            <ul id = "sortList">
+                <li class="foldMenu__item" id="Insertion">Insertion Sort</li>
+                <li class="foldMenu__item active" id="Bubble">Bubble sort</li>
+            </ul>
+        </div>
         <div class="menu_item" id = "newArray">New array</div>
         <div class="menu_item" id = "sortButton">Sort</div>
         <div class="menu_item">
-            <label for="slider"><input id="slider" type="range" max="100" min="2"></label>
+            <label for="slider"><input id="slider" type="range" max="50" min="2"></label>
         </div>
     </div>
 </header>

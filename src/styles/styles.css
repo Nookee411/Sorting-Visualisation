@@ -16,23 +16,55 @@ header,footer{
     font-size: 1rem;
     text-align: center;
 }
+header{
+    height: auto;
+}
 .menu{
     display: flex;
     justify-content: space-around;
     align-items: center;
+    height: 100%;
 }
 
 .menu_item{
-    border: 1px solid white;
-    margin: 10px;
+    outline: none;
+    width: 100%;
+    height: 5vh;
     cursor: default;
     user-select: none;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+.foldMenu__item{
+    display: none;
 
+}
+.active{
+    background-color: red;
+    color: #222222;
+}
+.foldMenu ul{
+    position: absolute;
+    background-color: #222222;
+    width: 25%;
+    left: 0;
+    top:5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+    padding-left: 0;
+
+}
+.foldMenu__item:hover{
+    background-color: #aaaaaa;
+}
+
+.foldMenu:hover .foldMenu__item{
+    display: flex;
+    transition-duration: .5s;
+}
 .wrapper{
     height: 80vh;
     width: 100%;
@@ -45,7 +77,8 @@ header,footer{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80%;
+    max-width: 80%;
+    min-width: 50%;
     background-color: #333;
 }
 
@@ -75,4 +108,23 @@ footer{
     display: flex;
     justify-content: space-around;
     align-items: center;
+}
+
+.statusBar_item{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu_item:hover{
+    transition-duration: 1s;
+    background-color: black;
+}
+.menu_item:active{
+
+}
+#clickName{
+    display: block;
 }

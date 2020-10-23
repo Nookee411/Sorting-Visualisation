@@ -14,6 +14,8 @@ export class Visualizer{
         this.timer.addEventListener(TimerEvents.tick,(params)=>{
             this.timerValue.innerText = `${Math.round(params.msFromStart/1000)}s ${params.msFromStart % 1000}ms`;
         })
+        this.sortList = document.getElementById('sortList')
+        this.currentSort = document.getElementById('active')
     }
 
     resetCounter(){

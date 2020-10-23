@@ -3,6 +3,7 @@ export const SortEvent = {
     SortingFinished: 'SORTING_FINISHED'
 };
 
+
 //TODO Fix multiple sorting
 //TODO Fix new array creation
 //TODO Change sorting visualisation
@@ -12,8 +13,9 @@ export class Sort{
         this.array = this.initArray(n);
         this.events = {};
         this.isSorting = false;
-
+        this.currentSortName = 'Bubble Sort';
     }
+
     initArray(size){
         let array = new Array(size);
         for (let i = 0; i < size; i++) {
@@ -24,20 +26,6 @@ export class Sort{
             return Math.round(Math.random() * (max - min) + min);
         }
     }
-
-
-    setSize(size){
-        this.array = this.initArray(size);
-    }
-
-    getArray(){
-        return this.array;
-    }
-
-    remakeArray(newSize){
-        this.array = this.initArray(newSize);
-    }
-
     async bubbleSort() {
 
         this.isSorting = true;
@@ -62,6 +50,21 @@ export class Sort{
         this.dispatch(SortEvent.SortingFinished,{});
     }
 
+
+    setSize(size){
+        this.array = this.initArray(size);
+    }
+
+    getArray(){
+        return this.array;
+    }
+
+    remakeArray(newSize){
+        this.array = this.initArray(newSize);
+    }
+
+
+
     addEventListener(event, callback) {
         this.events[event] = callback;
     }
@@ -77,4 +80,32 @@ export class Sort{
         }
     }
 
+    setCurrentSort(sortName){
+        this.currentSortName = sortName;
+    }
+
+    applySort(){
+        switch (this.currentSortName) {
+            case "Bubble": this.bubbleSort(); break;
+            case "Insertion": this.insertionSort(); break;
+        }
+    }
+
+    async insertionSort() {
+        //We are taking each element to the left until it starts to fit comparer
+        this.isSorting = true;
+        for (let i = 1; i < this.array.length; i++) {
+            let indexOfEle = i;
+            while(indexOfEle>0||this.array[indexOfEle]>this.array[indexOfEle-1]){
+                [this.array[indexOfEle-1],this.array[indexOfEle]] =
+                    [this.array[indexOfEle],this.array[indexOfEle-1]]
+                indexOfEle--;
+                this.dispatch(SortEvent.ItemsSorted,{
+                    indexOne: indexOfEle
+                })
+                indexOfEle--;
+                await new Promise((res) => setTimeout(res, 10));
+            }
+        }
+    }
 }
