@@ -2,12 +2,14 @@ import 'regenerator-runtime/runtime';
 import {Sort, SortEvent} from "./model/core/model";
 import {Visualizer} from "./view/view";
 
-//TODO Add timer
-//TODO Add shift counter
+let ghpages = require('gh-pages');
+ghpages.publish('dist',callback())
+
+
 let vis = new Visualizer();
 let currentSize = vis.slider.value;
 let sort = new Sort(currentSize);
-
+let callback = function (err){};
 vis.redrawVisual(sort.getArray())
 
 sort.addEventListener(SortEvent.ItemsSorted, (params) => {
