@@ -13,7 +13,7 @@ export class Sort{
         this.array = this.initArray(n);
         this.events = {};
         this.isSorting = false;
-        this.currentSortName = 'Bubble Sort';
+        this.currentSortName = 'Bubble';
     }
 
     initArray(size){
@@ -40,8 +40,7 @@ export class Sort{
 
                     }
                     this.dispatch(SortEvent.ItemsSorted, {
-                        indexOne: j,
-                        indexTwo: j + 1,
+                        index: j+1,
                     });
                     await new Promise((res) => setTimeout(res, 10));
                 }
@@ -88,6 +87,7 @@ export class Sort{
         switch (this.currentSortName) {
             case "Bubble": this.bubbleSort(); break;
             case "Insertion": this.insertionSort(); break;
+            case "Merge": this.mergeSort(this.array); break;
         }
     }
 
@@ -96,16 +96,46 @@ export class Sort{
         this.isSorting = true;
         for (let i = 1; i < this.array.length; i++) {
             let indexOfEle = i;
-            while(indexOfEle>0||this.array[indexOfEle]>this.array[indexOfEle-1]){
+            while(indexOfEle>=0&&this.array[indexOfEle]<this.array[indexOfEle-1]){
                 [this.array[indexOfEle-1],this.array[indexOfEle]] =
                     [this.array[indexOfEle],this.array[indexOfEle-1]]
                 indexOfEle--;
                 this.dispatch(SortEvent.ItemsSorted,{
-                    indexOne: indexOfEle
+                    index: indexOfEle
                 })
-                indexOfEle--;
                 await new Promise((res) => setTimeout(res, 10));
             }
         }
+        this.dispatch(SortEvent.SortingFinished,{})
     }
+
+    mergeSort(array){
+        if(!array || !array.length)
+            return null;
+        if(array.length<=1)
+            return array;
+
+        const middle = Math.floor(array.length / 2);
+        const arrLeft = array.slice(0, middle);
+        const arrRight = array.slice(middle);
+
+        return this.merge(arrLeft,arrRight)
+    }
+
+
+    async merge(arrFirst, arrSecond){
+        const sortedArray = [];
+        let j,i = j = 0;
+
+        while (i < arrFirst.length && j < arrSecond.length) {
+            sortedArray.push(
+                (arrFirst[i] < arrSecond[j]) ?
+                    arrFirst[i++] : arrSecond[j++]
+        );
+            this.dispatch(SortEvent.ItemsSorted, {
+                index: this.array.indexOf((arrFirst[i] < arrSecond[j]) ? arrFirst[i]: arrSecond[j])
+            });
+        }
+        return sortedArray;
+    };
 }

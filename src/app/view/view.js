@@ -12,7 +12,7 @@ export class Visualizer{
         this.shiftsValue = document.getElementById('shiftsValue')
         this.timer = new Timer();
         this.timer.addEventListener(TimerEvents.tick,(params)=>{
-            this.timerValue.innerText = `${Math.round(params.msFromStart/1000)}s ${params.msFromStart % 1000}ms`;
+            this.timerValue.innerText = `${Math.round(params.elapsedTime/1000)}s ${params.elapsedTime % 1000}ms`;
         })
         this.sortList = document.getElementById('sortList')
         this.currentSort = document.getElementById('active')

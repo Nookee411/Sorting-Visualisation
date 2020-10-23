@@ -12,7 +12,7 @@ let sort = new Sort(currentSize);
 vis.redrawVisual(sort.getArray())
 
 sort.addEventListener(SortEvent.ItemsSorted, (params) => {
-    vis.redrawVisual(sort.getArray(), params.indexTwo);
+    vis.redrawVisual(sort.getArray(), params.index);
     vis.updateCounter()
 })
 
@@ -42,6 +42,7 @@ vis.sortList.addEventListener('click',(e)=>{
     }
     e.target.className = 'foldMenu__item active';
     sort.setCurrentSort(e.target.id);
+    newArray()
 })
 
 function newArray(){
