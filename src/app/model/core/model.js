@@ -13,7 +13,7 @@ export class Sort{
         this.array = this.initArray(n);
         this.events = {};
         this.isSorting = false;
-        this.currentSortName = 'Bubble';
+        this.currentSortName = 'Merge';
     }
 
     initArray(size){
@@ -84,11 +84,14 @@ export class Sort{
     }
 
     applySort(){
+        this.isSorting = true
         switch (this.currentSortName) {
             case "Bubble": this.bubbleSort(); break;
             case "Insertion": this.insertionSort(); break;
-            case "Merge": this.mergeSort(this.array); break;
+            case "Merge":  this.mergeSort(0,this.array.length-1);
+                break;
         }
+        console.log(this.array);
     }
 
     async insertionSort() {
@@ -106,36 +109,39 @@ export class Sort{
                 await new Promise((res) => setTimeout(res, 10));
             }
         }
-        this.dispatch(SortEvent.SortingFinished,{})
+        this.dispatch(SortEvent.SortingFinished,{});
     }
 
-    mergeSort(array){
-        if(!array || !array.length)
-            return null;
-        if(array.length<=1)
-            return array;
-
-        const middle = Math.floor(array.length / 2);
-        const arrLeft = array.slice(0, middle);
-        const arrRight = array.slice(middle);
-
-        return this.merge(arrLeft,arrRight)
-    }
-
-
-    async merge(arrFirst, arrSecond){
-        const sortedArray = [];
-        let j,i = j = 0;
-
-        while (i < arrFirst.length && j < arrSecond.length) {
-            sortedArray.push(
-                (arrFirst[i] < arrSecond[j]) ?
-                    arrFirst[i++] : arrSecond[j++]
-        );
-            this.dispatch(SortEvent.ItemsSorted, {
-                index: this.array.indexOf((arrFirst[i] < arrSecond[j]) ? arrFirst[i]: arrSecond[j])
-            });
+    mergeSort(start,end){
+        let middleInPartial = Math.floor((start+end)/2)
+        console.log(`Mid: ${middleInPartial} Pair: ${start} - ${end} Array: ${this.array}`)
+        if(end-start<=1) {
+            return;
         }
-        return sortedArray;
-    };
+        this.mergeSort(start,middleInPartial)
+        this.mergeSort(middleInPartial+1,end)
+        this.merge(start, middleInPartial, middleInPartial, end)
+
+    }
+
+
+    async merge(startFirst, endFirst, startSecond, endSecond){
+        let i = startFirst
+        let j = startSecond
+
+        while (i<endFirst && j<=endSecond){
+            console.log(`${this.array[i]} & ${this.array[j]}`);
+            if(this.array[i]>this.array[j])
+                i++
+            else {
+                let tempValue = this.array.splice(j,1)
+                this.array.splice(i, 0, tempValue)
+                j++
+                endFirst++
+            }
+            this.dispatch(SortEvent.ItemsSorted,{index: i})
+            await  new Promise(res =>setTimeout(res,100))
+        }
+        return
+    }
 }
