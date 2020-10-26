@@ -9,7 +9,6 @@ let sort = new Sort(currentSize);
 vis.redrawVisual(sort.getArray())
 
 sort.addEventListener(SortEvent.ItemsSorted, (params) => {
-    console.log(sort.array);
     vis.redrawVisual(sort.getArray(), params.index, 'yellow');
     vis.updateCounter()
 })
