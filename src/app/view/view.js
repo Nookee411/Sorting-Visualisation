@@ -9,7 +9,9 @@ export class Visualizer{
         this.sortButton = document.getElementById('sortButton');
         this.timerValue = document.getElementById('timerValue');
         this.shifts = 0;
-        this.shiftsValue = document.getElementById('shiftsValue')
+        this.swapValue = document.getElementById('shiftsValue')
+        this.comp = 0;
+        this.compValue = document.getElementById('comparisonsValue')
         this.timer = new Timer();
         this.timer.addEventListener(TimerEvents.tick,(params)=>{
             this.timerValue.innerText = `${Math.round(params.elapsedTime/1000)}s ${params.elapsedTime % 1000}ms`;
@@ -18,18 +20,22 @@ export class Visualizer{
         this.currentSort = document.getElementById('active')
     }
 
-    resetCounter(){
-        this.shifts = 0
-        this.shiftsValue.innerText = '0'
+    resetStats(){
+        this.shifts = 0;
+        this.swapValue.innerText = '0';
+        this.timerValue.innerText = '0s 0ms';
+        this.comp = 0;
+        this.compValue.innerText = '0';
     }
 
     updateCounter(){
-        this.shiftsValue.innerText = (++this.shifts).toString()
+        this.swapValue.innerText = (++this.shifts).toString();
     }
 
-    clearStats(){
-        this.timerValue.innerText = '0s 0ms'
+    updateComparisons(){
+        this.compValue.innerText = (++this.comp).toString();
     }
+
 
     redrawVisual(array, highlight,color){
         this.visualizer.innerHTML ='';

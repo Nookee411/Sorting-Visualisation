@@ -1,10 +1,7 @@
 import 'regenerator-runtime/runtime';
+
 import {Sort, SortEvent} from "./model/core/model";
-import {Visualizer} from "./view/view";
-
-// let ghPages = require('gh-pages');
-// ghPages.publish('dist',callback())
-
+import {Visualizer} from "./view/view"
 
 let vis = new Visualizer();
 let currentSize = vis.slider.value;
@@ -12,16 +9,14 @@ let sort = new Sort(currentSize);
 vis.redrawVisual(sort.getArray())
 
 sort.addEventListener(SortEvent.ItemsSorted, (params) => {
-    vis.redrawVisual(sort.getArray(), params.index);
-    vis.updateCounter()
-})
-sort.addEventListener(SortEvent.ItemsSorted, (params) => {
+    console.log(sort.array);
     vis.redrawVisual(sort.getArray(), params.index, 'yellow');
     vis.updateCounter()
 })
 
 sort.addEventListener(SortEvent.ItemScanned,(params)=>{
     vis.redrawVisual(sort.getArray(),params.index, "gray")
+    vis.updateComparisons()
 })
 
 
@@ -56,7 +51,7 @@ vis.sortList.addEventListener('click',(e)=>{
 
 function newArray(){
     sort.isSorting = false;
-    vis.resetCounter()
+    vis.resetStats()
     currentSize = vis.slider.value;
     sort.remakeArray(currentSize);
     vis.redrawVisual(sort.getArray());

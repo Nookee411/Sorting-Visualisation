@@ -15,11 +15,10 @@
         <div class= "menu_item foldMenu">
             <div class="foldMenu__name">Algorithm</div>
             <ul id = "sortList">
-                <li class="foldMenu__item" id="Insertion">Insertion Sort</li>
+                <li class="foldMenu__item active" id="Insertion">Insertion Sort</li>
                 <li class="foldMenu__item" id="Selection">Selection Sort</li>
                 <li class="foldMenu__item" id="Bubble">Bubble sort</li>
-                <!--<li class="foldMenu__item active" id="Merge">Merge sort</li>-->
-            </ul>
+                <li class="foldMenu__item" id="Merge">Merge sort</li>
         </div>
         <div class="menu_item" id = "newArray">New array</div>
         <div class="menu_item" id = "sortButton">Sort</div>
@@ -35,12 +34,16 @@
 <footer>
     <div class="statusBar">
         <div class="statusBar_item">
-            <div class="statusBar__text">Steps: </div>
+            <div class="statusBar__text">Swaps: </div>
             <div class="statusBar__value"  id = 'shiftsValue'>0</div>
         </div>
         <div class="statusBar_item">
+            <div class="statusBar__text">Comparisons: </div>
+            <div class="statusBar__value"  id = 'comparisonsValue'>0</div>
+        </div>
+        <div class="statusBar_item">
             <div class="statusBar__text">Time: </div>
-            <div class="statusBar__value" id = 'timerValue'>00:00</div>
+            <div class="statusBar__value" id = 'timerValue'>0s 0ms</div>
         </div>
     </div>
 </footer>
