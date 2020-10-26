@@ -6,30 +6,30 @@ import {Visualizer} from "./view/view"
 let vis = new Visualizer();
 let currentSize = vis.slider.value;
 let sort = new Sort(currentSize);
-vis.redrawVisual(sort.getArray())
+vis.createVisual(sort.getArray())
 
-sort.addEventListener(SortEvent.ItemsSorted, (params) => {
-    vis.redrawVisual(sort.getArray(), params.index, 'yellow');
+sort.addEventListener(SortEvent.ItemSwapped, (params) => {
+    vis.updateVisual(sort.getArray(), params.index, 'yellow');
     vis.updateCounter()
 })
 
 sort.addEventListener(SortEvent.ItemScanned,(params)=>{
-    vis.redrawVisual(sort.getArray(),params.index, "gray")
+    vis.updateVisual(sort.getArray(),params.index, "gray")
     vis.updateComparisons()
 })
 
 
 sort.addEventListener(SortEvent.SortingFinished,(params)=>{
-    vis.redrawVisual((sort.getArray()))
+    vis.updateVisual((sort.getArray()))
     vis.timer.stop()
 })
 
 vis.slider.addEventListener('input',(e)=>{
-   newArray()
+    newArray();
 })
 
 vis.newArrayButton.addEventListener('click',(e)=>{
-    newArray()
+    newArray();
 })
 
 vis.sortButton.addEventListener('click',(e)=>{
@@ -53,5 +53,5 @@ function newArray(){
     vis.resetStats()
     currentSize = vis.slider.value;
     sort.remakeArray(currentSize);
-    vis.redrawVisual(sort.getArray());
+    vis.createVisual(sort.getArray());
 }

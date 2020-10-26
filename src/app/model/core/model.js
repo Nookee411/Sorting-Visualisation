@@ -1,7 +1,7 @@
 export const SortEvent = {
-    ItemsSorted: 'ITEMS_SORTED',
+    ItemSwapped: 'ITEMS_SORTED',
     SortingFinished: 'SORTING_FINISHED',
-    ItemScanned: 'ITEM_SCANNED'
+    ItemScanned: 'ITEM_SCANNED',
 };
 
 const config = {
@@ -67,29 +67,31 @@ export class Sort{
 
     setCurrentSort(sortName){
         this.currentSortName = sortName;
+
     }
 
     applySort(){
-        console.log(this.array);
+        let sortResult
         switch (this.currentSortName) {
-            case "Bubble": this.bubbleSort(); break;
-            case "Insertion": this.insertionSort(); break;
-            case "Selection": this.selectionSort(); break;
-            case "Merge": this.mergeSort(this.array,0); break;
+            case "Bubble": sortResult = this.bubbleSort(); break;
+            case "Insertion": sortResult = this.insertionSort(); break;
+            case "Selection": sortResult = this.selectionSort(); break;
+            case "Merge": sortResult = this.mergeSort(this.array,0); break;
         }
-        this.dispatch(SortEvent.SortingFinished,{});
+        sortResult.then(()=>this.dispatch(SortEvent.SortingFinished,{}));
     }
+
     async selectionSort() {
         this.isSorting = true;
         for (let i = 0; i < this.array.length&&this.isSorting; i++) {
 
                 let res = await this.findMaxValue(i)
-                this.dispatch(SortEvent.ItemsSorted, {index: res});
+                this.dispatch(SortEvent.ItemSwapped, {index: res});
                 await new Promise((resolve => {
                     setTimeout(resolve, config.SwapTime)
                 }));
             if(this.isSorting) {
-                [this.array[res], this.array[i]] = [this.array[i], this.array[res]];
+                this.swapAndDispatch(i,res)
             }
         }
         this.dispatch(SortEvent.SortingFinished, {});
@@ -117,52 +119,17 @@ export class Sort{
         this.isSorting = true;
         for (let i = 1; i < this.array.length; i++) {
             let indexOfEle = i;
-            while(indexOfEle>=0&&this.array[indexOfEle]<this.array[indexOfEle-1] &&
+            while(indexOfEle>0&&!this.compareAndDispatch(indexOfEle,indexOfEle-1) &&
             this.isSorting){
-                [this.array[indexOfEle - 1], this.array[indexOfEle]] =
-                        [this.array[indexOfEle], this.array[indexOfEle - 1]]
+                this.swapAndDispatch(indexOfEle-1,indexOfEle)
                     indexOfEle--;
-                    this.dispatch(SortEvent.ItemsSorted, {
-                        index: indexOfEle
-                    })
                     await new Promise((res) => setTimeout(res, 10));
             }
         }
         this.dispatch(SortEvent.SortingFinished,{});
     }
 
-    // async mergeSort(arr, indexInWhole){
-    //     if (arr.length <= 1) return arr;
-    //
-    //     let mid = Math.floor(arr.length / 2),
-    //         left = this.mergeSort(arr.slice(0, mid),indexInWhole),
-    //         right = this.mergeSort(arr.slice(mid),indexInWhole+mid);
-    //
-    //
-    //     return res(left, right,indexInWhole)
-    //
-    //     let res = async function merge(leftArr, rightArr,startInWhole){
-    //         let mergedArr = []
-    //         let i,j;
-    //         i=j=0
-    //         while (i<leftArr.length && j<rightArr.length) {
-    //             if (leftArr[0] > rightArr[0]) {
-    //                 mergedArr.push(leftArr.shift());
-    //
-    //             }
-    //             else {
-    //                 mergedArr.push(rightArr.shift());
-    //             }
-    //             [this.array[startInWhole],this.array[startInWhole+1]]=
-    //                 [this.array[startInWhole+1],this.array[startInWhole]]
-    //             this.dispatch(SortEvent.ItemsSorted, {index: this.array.indexOf(mergedArr[mergedArr.length-1])})
-    //             await new Promise(res=>setTimeout(res,100))
-    //         }
-    //         return mergedArr.concat(leftArr.slice().concat(rightArr.slice()));
-    //     }
-    // }
-
-    async mergeSort(splittedArray,generalIndex){
+    async mergeSort(splittedArray,startIndex){
         //recursion exit if array contains only one value
         this.isSorting = true
         if(splittedArray.length <=1)
@@ -172,42 +139,40 @@ export class Sort{
         let rightArr = splittedArray.slice(middle)
 
         return this.mergeArrays(
-            await this.mergeSort(leftArr, generalIndex),
-            await this.mergeSort(rightArr, generalIndex + middle),
-            generalIndex
+            await this.mergeSort(leftArr, startIndex),
+            await this.mergeSort(rightArr, startIndex + middle),
+            startIndex
         );
     }
 
-    async mergeArrays(leftArr, rightArr, indexInGeneral) {
+    async mergeArrays(leftArr, rightArr, startIndex) {
 
-        let mergedArray = []
-        let i = 0;
-        let j = 0;
-        //Two finger method
-        while (i < leftArr.length && j < rightArr.length && this.isSorting) {
-            //setting pause before each iteration
-            //Comparator usage
-            await this.sleepDuration(config.ComparisonTime).then(() => {
-
-
-                if (leftArr[i] < rightArr[j]) {
-                    mergedArray.push(leftArr[i++]);
-                } else {
-
-                    mergedArray.push(rightArr[j++]);
-                }
-                this.dispatch(SortEvent.ItemScanned, {index: indexInGeneral})
-            })
-
+        if(this.isSorting) {
+            let mergedArray = []
+            let i = 0;
+            let j = 0;
+            //Two finger method
+            while (i < leftArr.length && j < rightArr.length && this.isSorting) {
+                //setting pause before each iteration
+                //Comparator usage
+                await this.sleepDuration(config.ComparisonTime).then(() => {
+                    if (leftArr[i] < rightArr[j])
+                        mergedArray.push(leftArr[i++]);
+                    else
+                        mergedArray.push(rightArr[j++]);
+                    this.dispatch(SortEvent.ItemScanned, {index: startIndex + mergedArray.length})
+                })
+            }
+            mergedArray = mergedArray.concat(leftArr.slice(i).concat(rightArr.slice(j)))
+            for (let i = 0; i < mergedArray.length && this.isSorting; i++) {
+                this.sleepDuration(config.SwapTime)
+                    .then((resolve) => {
+                        this.array[i + startIndex] = mergedArray[i];
+                        this.dispatch(SortEvent.ItemSwapped, {index: i + startIndex});
+                    })
+            }
+            return mergedArray
         }
-        mergedArray = mergedArray.concat(leftArr.slice(i).concat(rightArr.slice(j)))
-        for (let i = 0; i < mergedArray.length; i++) {
-            this.sleepDuration(config.SwapTime).then((resolve) => {
-                this.array[i + indexInGeneral] = mergedArray[i];
-                this.dispatch(SortEvent.ItemsSorted, {index: i + indexInGeneral});
-            })
-        }
-        return mergedArray
     }
 
 
@@ -218,24 +183,25 @@ export class Sort{
         this.isSorting = true;
         for (let i = 0; i < this.array.length; i++) {
             for (let j = 0; j < this.array.length - i - 1; j++) {
-                if(this.isSorting) {
-                    this.dispatch(SortEvent.ItemScanned, {index: j+1});
-                    if (this.array[j] > this.array[j + 1]){
-                        [this.array[j], this.array[j + 1]] = [
-                            this.array[j + 1],
-                            this.array[j],
-                        ];
-                        this.dispatch(SortEvent.ItemsSorted, {
-                            index: j + 1,
-                        });
-
-
-                    }
+                if (this.isSorting) {
+                    if (this.compareAndDispatch(j, j + 1))
+                        this.swapAndDispatch(j, j + 1)
                     await new Promise((res) => setTimeout(res, config.SwapTime));
                 }
-                }
             }
+        }
+
         this.dispatch(SortEvent.SortingFinished,{});
     }
 
+
+    swapAndDispatch(firstIndex,secondIndex) {
+        [this.array[firstIndex], this.array[secondIndex]] =
+            [this.array[secondIndex], this.array[firstIndex]]
+        this.dispatch(SortEvent.ItemSwapped, {index: secondIndex})
+    }
+    compareAndDispatch(firstIndex,secondIndex){
+        this.dispatch(SortEvent.ItemScanned,{index: secondIndex});
+        return this.array[firstIndex]>this.array[secondIndex];
+    }
 }

@@ -1,6 +1,11 @@
 
 import {Timer,TimerEvents} from "./timer";
 
+const colors ={
+    unsorted: "red",
+    sorted: "green",
+}
+
 export class Visualizer{
     constructor() {
         this.visualizer = document.getElementById('visualizer');
@@ -36,17 +41,24 @@ export class Visualizer{
         this.compValue.innerText = (++this.comp).toString();
     }
 
+    updateVisual(array,highlight,color){
+        let columns = this.visualizer.childNodes;
+        for (let i = 0; i <array.length; i++) {
+            let currentColor = colors.unsorted;
+            columns[i].style.height = array[i]+ "px";
+            columns[i].style.backgroundColor = currentColor;
+        }
+        columns[highlight].style.backgroundColor = color;
+    }
 
-    redrawVisual(array, highlight,color){
+    createVisual(array){
         this.visualizer.innerHTML ='';
         for (let i = 0; i < array.length; i++){
             let height = array[i];
-
         let column = createColumn(this.visualizer.clientWidth/array.length, height);
             if(this.visualizer.clientWidth/array.length>40)
                 column.innerText = height;
-            if(i === highlight)
-                column.style.backgroundColor = color;
+
             this.visualizer.appendChild(column);
         }
 
