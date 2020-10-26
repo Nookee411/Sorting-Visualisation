@@ -15,6 +15,15 @@ sort.addEventListener(SortEvent.ItemsSorted, (params) => {
     vis.redrawVisual(sort.getArray(), params.index);
     vis.updateCounter()
 })
+sort.addEventListener(SortEvent.ItemsSorted, (params) => {
+    vis.redrawVisual(sort.getArray(), params.index, 'yellow');
+    vis.updateCounter()
+})
+
+sort.addEventListener(SortEvent.ItemScanned,(params)=>{
+    vis.redrawVisual(sort.getArray(),params.index, "gray")
+})
+
 
 sort.addEventListener(SortEvent.SortingFinished,(params)=>{
     vis.redrawVisual((sort.getArray()))

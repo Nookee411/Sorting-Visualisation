@@ -31,7 +31,7 @@ export class Visualizer{
         this.timerValue.innerText = '0s 0ms'
     }
 
-    redrawVisual(array, highlight){
+    redrawVisual(array, highlight,color){
         this.visualizer.innerHTML ='';
         for (let i = 0; i < array.length; i++){
             let height = array[i];
@@ -40,7 +40,7 @@ export class Visualizer{
             if(this.visualizer.clientWidth/array.length>40)
                 column.innerText = height;
             if(i === highlight)
-                column.style.backgroundColor = "yellow";
+                column.style.backgroundColor = color;
             this.visualizer.appendChild(column);
         }
 
