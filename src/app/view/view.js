@@ -47,8 +47,10 @@ export class Visualizer{
             let currentColor = colors.unsorted;
             columns[i].style.height = array[i]+ "px";
             columns[i].style.backgroundColor = currentColor;
+            columns[i].innerText = array[i];
         }
-        columns[highlight].style.backgroundColor = color;
+        if(highlight<array.length&&highlight>0)
+            columns[highlight].style.backgroundColor = color;
     }
 
     createVisual(array){
