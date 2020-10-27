@@ -77,8 +77,10 @@ export class Sort{
             case "Insertion": sortResult = this.insertionSort(); break;
             case "Selection": sortResult = this.selectionSort(); break;
             case "Merge": sortResult = this.mergeSort(this.array,0); break;
+            case "Quick": sortResult = this.quickSort(0,this.array.length-1); break;
         }
         sortResult.then(()=>this.dispatch(SortEvent.SortingFinished,{}));
+        console.log(this.array);
     }
 
     async selectionSort() {
@@ -194,6 +196,37 @@ export class Sort{
         this.dispatch(SortEvent.SortingFinished,{});
     }
 
+    quickSort(low, high){
+        if(low<high){
+            let middle = this.partition(low, high)
+                // .then(resolve=>{
+                    this.quickSort(low,middle);
+                    this.quickSort(middle+1,high);
+                // })
+        }
+
+    }
+
+    partition(low,high){
+        let middleEle = Math.floor((high+low)/2);
+        let lowPointer = low;
+        let highPointer = high;
+        while(highPointer>lowPointer){
+            while(this.compareAndDispatch(lowPointer, middleEle)){
+                //await this.sleepDuration(config.ComparisonTime)
+                    lowPointer++;
+
+            }
+            while(this.compareAndDispatch(middleEle,highPointer)){
+                // await this.sleepDuration(config.ComparisonTime,()=>{})
+                    highPointer--;
+            }
+            if(lowPointer>=highPointer)
+                break;
+            this.swapAndDispatch(lowPointer++,highPointer--);
+        }
+        return highPointer;
+    }
 
     swapAndDispatch(firstIndex,secondIndex) {
         [this.array[firstIndex], this.array[secondIndex]] =

@@ -34,7 +34,7 @@ vis.newArrayButton.addEventListener('click',(e)=>{
 
 vis.sortButton.addEventListener('click',(e)=>{
     if(!sort.isSorting) {
-        vis.timer.start()
+        //vis.timer.start()
         sort.applySort()
     }
 })
