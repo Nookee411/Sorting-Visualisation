@@ -109,7 +109,6 @@ export class Sort {
                 this.swapAndDispatch(i, res)
             }
         }
-        this.dispatch(SortEvent.SortingFinished, {});
     }
 
     async findMaxValue(startIndex) {
@@ -143,7 +142,6 @@ export class Sort {
                 await new Promise((res) => setTimeout(res, 10));
             }
         }
-        this.dispatch(SortEvent.SortingFinished, {});
     }
 
     async mergeSort(splittedArray, startIndex) {
@@ -208,8 +206,6 @@ export class Sort {
                 }
             }
         }
-
-        this.dispatch(SortEvent.SortingFinished, {});
     }
 
     swap(leftIndex, rightIndex){
@@ -221,8 +217,8 @@ export class Sort {
         let pivot = this.array[Math.floor((right + left) / 2)];//middle element
         let i = left; //left pointer
         let j = right; //right pointer
-        while (i <= j) {
-            while (this.array[i] < pivot) {
+        while (i <= j&&this.isSorting) {
+            while (this.array[i] < pivot && this.isSorting) {
                 await this.sleepDuration(config.ComparisonTime)
                     .then(() => {
                         this.dispatch(SortEvent.ItemScanned,{index: i})
@@ -230,7 +226,7 @@ export class Sort {
                     });
 
             }
-            while (pivot < this.array[j]) {
+            while (pivot < this.array[j] && this.isSorting) {
                 await this.sleepDuration(config.ComparisonTime)
                     .then(() => {
                         this.dispatch(SortEvent.ItemScanned, {index: j});
@@ -238,7 +234,7 @@ export class Sort {
                     });
             }
             //console.log(i + " : " + j);
-            if (i <= j) {
+            if (i <= j && this.isSorting) {
                 this.swap(i, j);
                 this.dispatch(SortEvent.ItemSwapped,{index: i});
                 i++;
@@ -249,14 +245,15 @@ export class Sort {
     }
 
     async quickSort(left, right) {
+        this.isSorting = true;
         let index;
-        if (this.array.length > 1) {
+        if (this.array.length > 1 && this.isSorting) {
             index = await this.partition(left, right); //index returned from partition
             if (left < index - 1) { //more elements on the left side of the pivot
                 this.quickSort(left, index - 1);
             }
             if (index < right) { //more elements on the right side of the pivot
-                this.quickSort(index, right);
+                gitthis.quickSort(index, right);
             }
         }
         return this.array;

@@ -22,7 +22,6 @@ sort.addEventListener(SortEvent.ItemScanned,(params)=>{
 sort.addEventListener(SortEvent.SortingFinished,(params)=>{
     vis.updateVisual((sort.getArray()))
     vis.timer.stop()
-    alert("Finished.");
 })
 
 vis.slider.addEventListener('input',(e)=>{

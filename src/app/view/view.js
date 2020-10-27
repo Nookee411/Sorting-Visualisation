@@ -43,10 +43,12 @@ export class Visualizer{
 
     updateVisual(array,highlight,color){
         let columns = this.visualizer.childNodes;
+        let columnWidth = this.visualizer/array.length;
         for (let i = 0; i <array.length; i++) {
             let currentColor = colors.unsorted;
             columns[i].style.height = array[i]+ "px";
             columns[i].style.backgroundColor = currentColor;
+            if(columnWidth>40)
             columns[i].innerText = array[i];
         }
         if(highlight<array.length&&highlight>0)
@@ -55,9 +57,10 @@ export class Visualizer{
 
     createVisual(array){
         this.visualizer.innerHTML ='';
+        let width = this.visualizer.clientWidth/array.length;
         for (let i = 0; i < array.length; i++){
             let height = array[i];
-        let column = createColumn(this.visualizer.clientWidth/array.length, height);
+        let column = createColumn(width, height);
             if(this.visualizer.clientWidth/array.length>40)
                 column.innerText = height;
 
