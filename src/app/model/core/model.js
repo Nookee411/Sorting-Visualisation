@@ -253,7 +253,7 @@ export class Sort {
                 this.quickSort(left, index - 1);
             }
             if (index < right) { //more elements on the right side of the pivot
-                gitthis.quickSort(index, right);
+                this.quickSort(index, right);
             }
         }
         return this.array;
