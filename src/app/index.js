@@ -9,7 +9,7 @@ vis.createVisual(sort.getArray());
 
 sort.addEventListener(SortEvent.ItemSwapped, (params) => {
   vis.updateVisual(sort.getArray(), params.index, "yellow");
-  vis.updateCounter();
+  vis.increaseSwapCounter();
 });
 
 sort.addEventListener(SortEvent.ItemScanned, (params) => {

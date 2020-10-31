@@ -1,38 +1,41 @@
 export const TimerEvents = {
   tick: "TICK",
 };
-export class Timer {
-  interval;
-  tickRate;
-  elapsedTime;
-  constructor() {
-    this.events = {};
-    this.tickRate = 1000 / 20;
-  }
+//TODO Find solution to stop timer while browser is not active
+export function Timer() {
+  let interval;
+  const tickRate = 1000 / 20;
+  let elapsedTime;
+  let events = {};
 
-  start() {
-    this.elapsedTime = 0;
-    this.interval = setInterval(() => {
-      this.dispatch(TimerEvents.tick, {
-        elapsedTime: (this.elapsedTime += this.tickRate),
+  this.start = function () {
+    elapsedTime = 0;
+    defineInterval();
+  };
+
+  let defineInterval = function () {
+    interval = setInterval(() => {
+      dispatch(TimerEvents.tick, {
+        elapsedTime: (elapsedTime += tickRate),
       });
-    }, this.tickRate);
-  }
+    }, tickRate);
+  };
 
-  stop() {
-    clearInterval(this.interval);
-  }
+  this.stop = function () {
+    clearInterval(interval);
+  };
 
-  addEventListener(event, callback) {
-    this.events[event] = callback;
-  }
+  this.addEventListener = function (eventName, callback) {
+    events[eventName] = callback;
+    console.log(events);
+  };
 
-  removeEventListener(event) {
-    delete this.events[event];
-  }
+  this.removeEventListener = function (eventName) {
+    delete events[eventName];
+  };
 
-  dispatch(event, params) {
-    let callback = this.events[event];
+  let dispatch = function (eventName, params) {
+    let callback = events[eventName];
     if (callback) callback(params);
-  }
+  };
 }
