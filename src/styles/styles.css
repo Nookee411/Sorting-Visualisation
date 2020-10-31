@@ -1,130 +1,135 @@
-*,*:before,*:after{
-    box-sizing: border-box;
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
 }
 
-body{
-    margin: 0;
-    background-color: #333;
-    font-family: 'Open Sans', sans-serif;
-
-}
-header,footer{
-    background-color: #222;
-    height: 10vh;
-    color: #aaa;
-    letter-spacing: 1.5px;
-    font-size: 1rem;
-    text-align: center;
-}
-header{
-    height: auto;
-}
-.menu{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 100%;
+body {
+  margin: 0;
+  background-color: #333;
+  font-family: "Open Sans", sans-serif;
 }
 
-.menu_item{
-    outline: none;
-    width: 100%;
-    height: 7vh;
-    cursor: default;
-    user-select: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
 }
-.foldMenu__item{
-    display: none;
-
-}
-.active{
-    background-color: red;
-    color: #222222;
-}
-.foldMenu ul{
-    position: absolute;
-    background-color: #222222;
-    width: 25%;
-    left: 0;
-    top:7vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: 0;
-    padding-left: 0;
-
-}
-.foldMenu__item:hover{
-    background-color: #aaaaaa;
+header,
+footer {
+  height: 10vh;
+  background-color: rebeccapurple;
+  color: #aaa;
+  letter-spacing: 1.5px;
+  font-size: 1rem;
+  text-align: center;
 }
 
-.foldMenu:hover .foldMenu__item{
-    display: flex;
-    transition-duration: .5s;
+header {
+  height: auto;
 }
-.wrapper{
-    height: 83vh;
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
+.menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
 }
 
-.visualizer{
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    max-width: 80%;
-    min-width: 50%;
-    background-color: #333;
+.menu_item {
+  outline: none;
+  width: 100%;
+  cursor: default;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#slider{
-    color: #333333;
-    background: red;
-    border: solid 1px darkred;
-    border-radius: 8px;
-    height: 18px;
-    max-width: 100%;
-    min-width: 100px;
-    outline: none;
-    transition: background 450ms ease-in;
-    -webkit-appearance: none;
+.visualizer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+  background-color: #333;
 }
 
-footer{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    height: 10vh;
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
 }
 
-.statusBar{
-    height: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+.statusBar {
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.statusBar_item{
-    width: 50%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.statusBar_item {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.menu_item:hover{
-    transition-duration: 1s;
-    background-color: black;
+.wrapper {
+  background-color: #fff;
+  display: flex;
+  width: 100vw;
+  height: 85fr;
+  justify-content: center;
+  align-items: flex-end;
 }
-.menu_item:active{
 
+.foldMenu__item {
+  display: none;
+  border-top: 1px solid gray;
 }
-#clickName{
-    display: block;
+.active {
+  background-color: red;
+  color: #222222;
+}
+.foldMenu ul {
+  position: absolute;
+  background-color: #222222;
+  width: 25%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  padding-left: 0;
+}
+.foldMenu__item:hover {
+  background-color: #aaaaaa;
+}
+
+.foldMenu:hover .foldMenu__item {
+  display: flex;
+  transition-duration: 0.5s;
+}
+
+#slider {
+  color: #333333;
+  background: red;
+  border: solid 1px darkred;
+  border-radius: 8px;
+  height: 18px;
+  max-width: 100%;
+  min-width: 100px;
+  outline: none;
+  transition: background 450ms ease-in;
+  -webkit-appearance: none;
+}
+
+.menu_item:hover {
+  transition-duration: 1s;
+  background-color: black;
+}
+/* .menu_item:active {
+} */
+#clickName {
+  display: block;
 }
