@@ -1,24 +1,34 @@
 import "regenerator-runtime/runtime";
-import { Sort, SortEvent } from "./model/core/model";
-import { Visualizer } from "./view/view";
-// console.log(modelImplementation.number);
+import { SortManager } from "./model/core/SortManager";
+import { sortEvent } from "./model/core/constants/sortEvent";
+import { Visualizer } from "./view/Visualizer";
+import { sortingState } from "./model/core/constants/sortingState";
+
 let vis = new Visualizer();
 let currentSize = vis.slider.value;
-let sort = new Sort(currentSize);
+let sort = new SortManager(currentSize, "Bubble");
 vis.createVisual(sort.getArray());
 
-sort.addEventListener(SortEvent.ItemSwapped, (params) => {
-  vis.updateVisual(sort.getArray(), params.index, "yellow");
+sort.addEventListener(sortEvent.ItemSwapped, (params) => {
+  vis.updateVisual(
+    sort.getArray(),
+    { indexOne: params.indexOne, indexTwo: params.indexTwo },
+    "cyan"
+  );
   vis.increaseSwapCounter();
 });
 
-sort.addEventListener(SortEvent.ItemScanned, (params) => {
-  vis.updateVisual(sort.getArray(), params.index, "gray");
+sort.addEventListener(sortEvent.ItemScanned, (params) => {
+  vis.updateVisual(
+    sort.getArray(),
+    { indexOne: params.indexOne, indexTwo: params.indexTwo },
+    "gray"
+  );
   vis.updateComparisons();
 });
 
-sort.addEventListener(SortEvent.SortingFinished, (params) => {
-  vis.updateVisual(sort.getArray());
+sort.addEventListener(sortEvent.SortingFinished, (params) => {
+  vis.updateVisual(sort.getArray(), { indexOne: -1, indexTwo: -1 });
   vis.timer.stop();
 });
 
@@ -31,7 +41,7 @@ vis.newArrayButton.addEventListener("click", (e) => {
 });
 
 vis.sortButton.addEventListener("click", (e) => {
-  if (!sort.isSorting) {
+  if (sort.state == sortingState.stopped) {
     vis.timer.start();
     sort.applySort();
   }
@@ -48,8 +58,8 @@ vis.sortList.addEventListener("click", (e) => {
 
 function newArray() {
   vis.timer.stop();
-  sort.isSorting = false;
   vis.resetStats();
+  sort.stopSorting();
   currentSize = vis.slider.value;
   sort.remakeArray(currentSize);
   vis.createVisual(sort.getArray());

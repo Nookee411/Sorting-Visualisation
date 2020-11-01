@@ -1,31 +1,38 @@
 import { Timer, TimerEvents } from "./timer";
 
 const colors = {
-  unsorted: "red",
+  unsorted: "cadetblue",
   sorted: "green",
 };
 
+const elementIDs = {
+  COLUMN_CONTAINER: "visualizer",
+  TIMER_VALUE: "timerValue",
+  SWAP_VALUE: "shiftsValue",
+  COMPARATIONS_VALUE: "comparisonsValue",
+};
+
 export function Visualizer() {
-  let columnContainer = document.getElementById("visualizer");
-  let timerValue = document.getElementById("timerValue");
-  let swapValue = document.getElementById("shiftsValue");
-  let compValue = document.getElementById("comparisonsValue");
+  let columnContainer = document.getElementById(elementIDs.COLUMN_CONTAINER);
+  let timerValue = document.getElementById(elementIDs.TIMER_VALUE);
+  let swapValue = document.getElementById(elementIDs.SWAP_VALUE);
+  let compValue = document.getElementById(elementIDs.COMPARATIONS_VALUE);
   let columns;
   let columnWidth;
   let shifts = 0;
   let comp = 0;
 
-  this.timer = new Timer();
-  this.timer.addEventListener(TimerEvents.tick, (params) => {
-    this.timerValue.innerText = `${Math.round(params.elapsedTime / 1000)}s ${
-      params.elapsedTime % 1000
-    }ms`;
-  });
   this.sortList = document.getElementById("sortList");
   this.currentSort = document.getElementById("active");
   this.newArrayButton = document.getElementById("newArray");
   this.slider = document.getElementById("slider");
   this.sortButton = document.getElementById("sortButton");
+  this.timer = new Timer();
+  this.timer.addEventListener(TimerEvents.tick, (params) => {
+    timerValue.innerText = `${Math.round(params.elapsedTime / 1000)}s ${
+      params.elapsedTime % 1000
+    }ms`;
+  });
 
   this.resetStats = function () {
     shifts = 0;
@@ -49,10 +56,15 @@ export function Visualizer() {
       setColumnStyle(array, i);
     }
     if (
-      indexOfHighlightedElement < array.length &&
-      indexOfHighlightedElement > 0
+      indexOfHighlightedElement.indexTwo < array.length &&
+      indexOfHighlightedElement.indexTwo > 0
     )
-      columns[indexOfHighlightedElement].style.backgroundColor = color;
+      columns[indexOfHighlightedElement.indexTwo].style.backgroundColor = color;
+    if (
+      indexOfHighlightedElement.indexOne < array.length &&
+      indexOfHighlightedElement.indexOne > 0
+    )
+      columns[indexOfHighlightedElement.indexOne].style.backgroundColor = color;
   };
 
   let defineColumnNumber = function () {
@@ -75,7 +87,6 @@ export function Visualizer() {
     columnContainer.innerHTML = "";
     for (let i = 0; i < array.length; i++) {
       let column = createColumnFromValue(array[i]);
-      console.log(column);
       columnContainer.appendChild(column);
     }
   };
@@ -83,9 +94,8 @@ export function Visualizer() {
   let createColumnFromValue = function (value) {
     let column = document.createElement("div");
     column.style.height = value + "px";
-    console.log(columnWidth);
     column.style.width = columnWidth + "px";
-    column.style.backgroundColor = "red";
+    column.style.backgroundColor = colors.unsorted;
     column.style.marginLeft = "3px";
     column.style.borderRadius = columnWidth / 3 + "px";
     column.style.display = "flex";
