@@ -1,7 +1,7 @@
 import "regenerator-runtime/runtime";
 import { SortManager } from "./model/core/SortManager";
 import { sortEvent } from "./model/core/constants/sortEvent";
-import { Visualizer } from "./view/Visualizer";
+import { Visualizer, colors } from "./view/Visualizer";
 import { sortingState } from "./model/core/constants/sortingState";
 
 let vis = new Visualizer();
@@ -13,7 +13,7 @@ sort.addEventListener(sortEvent.ItemSwapped, (params) => {
   vis.updateVisual(
     sort.getArray(),
     { indexOne: params.indexOne, indexTwo: params.indexTwo },
-    "cyan"
+    colors.swapped
   );
   vis.increaseSwapCounter();
 });
@@ -22,7 +22,7 @@ sort.addEventListener(sortEvent.ItemScanned, (params) => {
   vis.updateVisual(
     sort.getArray(),
     { indexOne: params.indexOne, indexTwo: params.indexTwo },
-    "gray"
+    colors.scanned
   );
   vis.updateComparisons();
 });

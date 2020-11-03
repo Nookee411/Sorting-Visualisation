@@ -1,8 +1,10 @@
 import { Timer, TimerEvents } from "./timer";
 
-const colors = {
+export const colors = {
   unsorted: "cadetblue",
   sorted: "green",
+  swapped: "DeepPink",
+  scanned: "gray",
 };
 
 const elementIDs = {
@@ -10,6 +12,11 @@ const elementIDs = {
   TIMER_VALUE: "timerValue",
   SWAP_VALUE: "shiftsValue",
   COMPARATIONS_VALUE: "comparisonsValue",
+  SORT_LIST: "sortList",
+  ACTIVE_SORT_ALGO: "active",
+  NEW_ARRAY_BUTTON: "newArray",
+  ARRAY_SIZE_SLIDER: "slider",
+  START_SORT_BUTTON: "sortButton",
 };
 
 export function Visualizer() {
@@ -22,11 +29,11 @@ export function Visualizer() {
   let shifts = 0;
   let comp = 0;
 
-  this.sortList = document.getElementById("sortList");
-  this.currentSort = document.getElementById("active");
-  this.newArrayButton = document.getElementById("newArray");
-  this.slider = document.getElementById("slider");
-  this.sortButton = document.getElementById("sortButton");
+  this.sortList = document.getElementById(elementIDs.SORT_LIST);
+  this.currentSort = document.getElementById(elementIDs.ACTIVE_SORT_ALGO);
+  this.newArrayButton = document.getElementById(elementIDs.NEW_ARRAY_BUTTON);
+  this.slider = document.getElementById(elementIDs.ARRAY_SIZE_SLIDER);
+  this.sortButton = document.getElementById(elementIDs.START_SORT_BUTTON);
   this.timer = new Timer();
   this.timer.addEventListener(TimerEvents.tick, (params) => {
     timerValue.innerText = `${Math.round(params.elapsedTime / 1000)}s ${

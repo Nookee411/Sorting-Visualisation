@@ -1,0 +1,81 @@
+*,*:before,*:after{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    background-color: #333;
+    font-family: 'Open Sans', sans-serif;
+
+}
+header,footer{
+    background-color: #222;
+    height: 10vh;
+    color: #aaa;
+    letter-spacing: 1.5px;
+    font-size: 1rem;
+    text-align: center;
+}
+.menu{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.menu_item{
+    border: 1px solid white;
+    margin: 10px;
+    cursor: default;
+    user-select: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper{
+    height: 80vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.visualizer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    background-color: #333;
+}
+
+#slider{
+    color: #333333;
+    background: red;
+    border: solid 1px darkred;
+    border-radius: 8px;
+    height: 18px;
+    max-width: 100%;
+    min-width: 100px;
+    outline: none;
+    transition: background 450ms ease-in;
+    -webkit-appearance: none;
+}
+
+footer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 10vh;
+}
+
+.statusBar{
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+/*# sourceMappingURL=/styles.f43277d9.css.map */
