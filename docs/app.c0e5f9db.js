@@ -6794,6 +6794,19 @@ function SelectionSorter() {
     };
   }();
 }
+},{}],"app/model/core/constants/sortEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.sortEvent = void 0;
+var sortEvent = {
+  ItemSwapped: "ITEMS_SORTED",
+  SortingFinished: "SORTING_FINISHED",
+  ItemScanned: "ITEM_SCANNED"
+};
+exports.sortEvent = sortEvent;
 },{}],"app/model/SortingAlgorithms/MergeSorter.js":[function(require,module,exports) {
 "use strict";
 
@@ -6802,136 +6815,146 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.MergeSorter = MergeSorter;
 
+var _sortEvent = require("../core/constants/sortEvent");
+
+var _sortingState = require("../core/constants/sortingState");
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function MergeSorter(context) {
   var array;
-  this.sortArray = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            array = context.getArray();
-            mergeSort.call(this, array, 0);
+  this.sortArray = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+    var mergeSort, _mergeSort, mergeArrays, _mergeArrays;
 
-          case 2:
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _mergeArrays = function _mergeArrays3() {
+              _mergeArrays = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(leftArr, rightArr, startIndex) {
+                var mergedArray, i, j, _loop, _i;
+
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                  while (1) {
+                    switch (_context2.prev = _context2.next) {
+                      case 0:
+                        mergedArray = [];
+                        i = 0;
+                        j = 0; //Two finger method
+
+                      case 3:
+                        if (!(i < leftArr.length && j < rightArr.length)) {
+                          _context2.next = 8;
+                          break;
+                        }
+
+                        _context2.next = 6;
+                        return context.sleepDuration(100).then(function () {
+                          if (leftArr[i] < rightArr[j]) mergedArray.push(leftArr[i++]);else mergedArray.push(rightArr[j++]);
+                          context.dispatch(_sortEvent.sortEvent.ItemScanned, {
+                            indexOne: startIndex + mergedArray.length,
+                            indexTwo: startIndex
+                          });
+                        });
+
+                      case 6:
+                        _context2.next = 3;
+                        break;
+
+                      case 8:
+                        mergedArray = mergedArray.concat(leftArr.slice(i).concat(rightArr.slice(j)));
+
+                        _loop = function _loop(_i) {
+                          context.sleepDuration(100).then(function (resolve) {
+                            array[_i + startIndex] = mergedArray[_i];
+                            context.dispatch(_sortEvent.sortEvent.ItemSwapped, {
+                              indexOne: _i + startIndex
+                            });
+                          });
+                        };
+
+                        for (_i = 0; _i < mergedArray.length && context.state == _sortingState.sortingState.sorting; _i++) {
+                          _loop(_i);
+                        }
+
+                        return _context2.abrupt("return", mergedArray);
+
+                      case 12:
+                      case "end":
+                        return _context2.stop();
+                    }
+                  }
+                }, _callee2);
+              }));
+              return _mergeArrays.apply(this, arguments);
+            };
+
+            mergeArrays = function _mergeArrays2(_x3, _x4, _x5) {
+              return _mergeArrays.apply(this, arguments);
+            };
+
+            _mergeSort = function _mergeSort3() {
+              _mergeSort = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(splittedArray, startIndex) {
+                var middle, leftArr, rightArr;
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        console.log(splittedArray); //recursion exit if array contains only one value
+
+                        if (!(splittedArray.length <= 1)) {
+                          _context.next = 3;
+                          break;
+                        }
+
+                        return _context.abrupt("return", splittedArray);
+
+                      case 3:
+                        middle = Math.floor(splittedArray.length / 2);
+                        leftArr = splittedArray.slice(0, middle);
+                        rightArr = splittedArray.slice(middle);
+                        _context.t0 = mergeArrays;
+                        _context.next = 9;
+                        return mergeSort(leftArr, startIndex);
+
+                      case 9:
+                        _context.t1 = _context.sent;
+                        _context.next = 12;
+                        return mergeSort(rightArr, startIndex + middle);
+
+                      case 12:
+                        _context.t2 = _context.sent;
+                        _context.t3 = startIndex;
+                        return _context.abrupt("return", (0, _context.t0)(_context.t1, _context.t2, _context.t3));
+
+                      case 15:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                }, _callee);
+              }));
+              return _mergeSort.apply(this, arguments);
+            };
+
+            mergeSort = function _mergeSort2(_x, _x2) {
+              return _mergeSort.apply(this, arguments);
+            };
+
+            array = context.getArray();
+            mergeSort(array, 0);
+
+          case 6:
           case "end":
-            return _context.stop();
+            return _context3.stop();
         }
       }
-    }, _callee, this);
+    }, _callee3);
   }));
-
-  var mergeSort = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(splittedArray, startIndex) {
-      var middle, leftArr, rightArr;
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              if (!(splittedArray.length <= 1)) {
-                _context2.next = 2;
-                break;
-              }
-
-              return _context2.abrupt("return", splittedArray);
-
-            case 2:
-              middle = Math.floor(splittedArray.length / 2);
-              leftArr = splittedArray.slice(0, middle);
-              rightArr = splittedArray.slice(middle);
-              _context2.t0 = mergeArrays;
-              _context2.next = 8;
-              return mergeSort(leftArr, startIndex);
-
-            case 8:
-              _context2.t1 = _context2.sent;
-              _context2.next = 11;
-              return mergeSort(rightArr, startIndex + middle);
-
-            case 11:
-              _context2.t2 = _context2.sent;
-              _context2.t3 = startIndex;
-              return _context2.abrupt("return", (0, _context2.t0)(_context2.t1, _context2.t2, _context2.t3));
-
-            case 14:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-
-    return function mergeSort(_x, _x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  var mergeArrays = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(leftArr, rightArr, startIndex) {
-      var mergedArray, i, j, _loop, _i;
-
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              mergedArray = [];
-              i = 0;
-              j = 0; //Two finger method
-
-            case 3:
-              if (!(i < leftArr.length && j < rightArr.length)) {
-                _context3.next = 8;
-                break;
-              }
-
-              _context3.next = 6;
-              return context.sleepDuration(100).then(function () {
-                if (leftArr[i] < rightArr[j]) mergedArray.push(leftArr[i++]);else mergedArray.push(rightArr[j++]);
-                context.dispatch(sortEvent.ItemScanned, {
-                  indexOne: startIndex + mergedArray.length,
-                  indexTwo: startIndex
-                });
-              });
-
-            case 6:
-              _context3.next = 3;
-              break;
-
-            case 8:
-              mergedArray = mergedArray.concat(leftArr.slice(i).concat(rightArr.slice(j)));
-
-              _loop = function _loop(_i) {
-                sleepDuration(config.SwapTime).then(function (resolve) {
-                  array[_i + startIndex] = mergedArray[_i];
-                  dispatch(sortEvent.ItemSwapped, {
-                    indexOne: _i + startIndex
-                  });
-                });
-              };
-
-              for (_i = 0; _i < mergedArray.length && sortState == sortingState.sorting; _i++) {
-                _loop(_i);
-              }
-
-              return _context3.abrupt("return", mergedArray);
-
-            case 12:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3);
-    }));
-
-    return function mergeArrays(_x3, _x4, _x5) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
 }
-},{}],"app/model/SortingAlgorithms/SorterFactory.js":[function(require,module,exports) {
+},{"../core/constants/sortEvent":"app/model/core/constants/sortEvent.js","../core/constants/sortingState":"app/model/core/constants/sortingState.js"}],"app/model/SortingAlgorithms/SorterFactory.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6957,10 +6980,8 @@ function SorterFactory(context) {
 
     switch (currentSortName) {
       case "Bubble":
-        {
-          sorter = new _BubbleSorter.BubbleSorter();
-          break;
-        }
+        sorter = new _BubbleSorter.BubbleSorter();
+        break;
 
       case "Insertion":
         sorter = new _InsertionSorter.InsertionSorter();
@@ -6969,26 +6990,17 @@ function SorterFactory(context) {
       case "Selection":
         sorter = new _SelectionSorter.SelectionSorter();
         break;
+
+      case "Merge":
+        sorter = new _MergeSorter.MergeSorter(context);
+        break;
     }
 
     sorter.sortArray.call(context);
     return sortResult;
   };
 }
-},{"./BubbleSorter":"app/model/SortingAlgorithms/BubbleSorter.js","./InsertionSorter":"app/model/SortingAlgorithms/InsertionSorter.js","../core/constants/sortingState":"app/model/core/constants/sortingState.js","./SelectionSorter":"app/model/SortingAlgorithms/SelectionSorter.js","./MergeSorter":"app/model/SortingAlgorithms/MergeSorter.js"}],"app/model/core/constants/sortEvent.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.sortEvent = void 0;
-var sortEvent = {
-  ItemSwapped: "ITEMS_SORTED",
-  SortingFinished: "SORTING_FINISHED",
-  ItemScanned: "ITEM_SCANNED"
-};
-exports.sortEvent = sortEvent;
-},{}],"app/model/core/Sorter.js":[function(require,module,exports) {
+},{"./BubbleSorter":"app/model/SortingAlgorithms/BubbleSorter.js","./InsertionSorter":"app/model/SortingAlgorithms/InsertionSorter.js","../core/constants/sortingState":"app/model/core/constants/sortingState.js","./SelectionSorter":"app/model/SortingAlgorithms/SelectionSorter.js","./MergeSorter":"app/model/SortingAlgorithms/MergeSorter.js"}],"app/model/core/Sorter.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7094,8 +7106,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -7122,6 +7132,7 @@ function SortManager(n, sortName) {
 
   var array = initArray(n);
   var events = {};
+  var protectedMethods = {};
   var sortState = _sortingState.sortingState.stopped;
   var currentSortName = sortName;
 
@@ -7154,7 +7165,7 @@ function SortManager(n, sortName) {
     delete events[eventName];
   };
 
-  var dispatch = function dispatch(eventName, params) {
+  protectedMethods.dispatch = function (eventName, params) {
     var callback = events[eventName];
 
     if (callback) {
@@ -7182,10 +7193,9 @@ function SortManager(n, sortName) {
     var ctx = new _Sorter.BubbleSorter();
 
     switch (currentSortName) {
-      case "Merge":
-        sortResult = mergeSort(array, 0);
-        break;
-
+      // case "Merge":
+      //   sortResult = mergeSort(array, 0);
+      //   break;
       case "Quick":
         sortResult = quickSort(0, array.length - 1);
         break;
@@ -7197,158 +7207,66 @@ function SortManager(n, sortName) {
       default:
         sorter.applySort(currentSortName);
         break;
-    }
+    } // sortResult.then(() =>
+    //   protectedMethods.dispatch(sortEvent.SortingFinished, {})
+    // );
 
-    sortResult.then(function () {
-      return dispatch(_sortEvent.sortEvent.SortingFinished, {});
-    });
-  };
+  }; // let mergeSort = async function (splittedArray, startIndex) {
+  //   //recursion exit if array contains only one value
+  //   if (splittedArray.length <= 1) return splittedArray;
+  //   let middle = Math.floor(splittedArray.length / 2);
+  //   let leftArr = splittedArray.slice(0, middle);
+  //   let rightArr = splittedArray.slice(middle);
+  //   return mergeArrays(
+  //     await mergeSort(leftArr, startIndex),
+  //     await mergeSort(rightArr, startIndex + middle),
+  //     startIndex
+  //   );
+  // };
+  // let mergeArrays = async function (leftArr, rightArr, startIndex) {
+  //   if (sortState == sortingState.sorting) {
+  //     let mergedArray = [];
+  //     let i = 0;
+  //     let j = 0;
+  //     //Two finger method
+  //     while (i < leftArr.length && j < rightArr.length) {
+  //       //setting pause before each iteration
+  //       //Comparator usage
+  //       await protectedMethods.sleepDuration(config.ComparisonTime).then(() => {
+  //         if (leftArr[i] < rightArr[j]) mergedArray.push(leftArr[i++]);
+  //         else mergedArray.push(rightArr[j++]);
+  //         protectedMethods.dispatch(sortEvent.ItemScanned, {
+  //           indexOne: startIndex + mergedArray.length,
+  //           indexTwo: startIndex,
+  //         });
+  //       });
+  //     }
+  //     mergedArray = mergedArray.concat(
+  //       leftArr.slice(i).concat(rightArr.slice(j))
+  //     );
+  //     for (
+  //       let i = 0;
+  //       i < mergedArray.length && sortState == sortingState.sorting;
+  //       i++
+  //     ) {
+  //       protectedMethods.sleepDuration(config.SwapTime).then((resolve) => {
+  //         array[i + startIndex] = mergedArray[i];
+  //         protectedMethods.dispatch(sortEvent.ItemSwapped, {
+  //           indexOne: i + startIndex,
+  //         });
+  //       });
+  //     }
+  //     return mergedArray;
+  //   }
+  // };
 
-  var mergeSort = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(splittedArray, startIndex) {
-      var middle, leftArr, rightArr;
+
+  var partition = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(left, right) {
+      var pivot, i, j;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
-            case 0:
-              if (!(splittedArray.length <= 1)) {
-                _context.next = 2;
-                break;
-              }
-
-              return _context.abrupt("return", splittedArray);
-
-            case 2:
-              middle = Math.floor(splittedArray.length / 2);
-              leftArr = splittedArray.slice(0, middle);
-              rightArr = splittedArray.slice(middle);
-              _context.t0 = mergeArrays;
-              _context.next = 8;
-              return mergeSort(leftArr, startIndex);
-
-            case 8:
-              _context.t1 = _context.sent;
-              _context.next = 11;
-              return mergeSort(rightArr, startIndex + middle);
-
-            case 11:
-              _context.t2 = _context.sent;
-              _context.t3 = startIndex;
-              return _context.abrupt("return", (0, _context.t0)(_context.t1, _context.t2, _context.t3));
-
-            case 14:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    return function mergeSort(_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-
-  var mergeArrays = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(leftArr, rightArr, startIndex) {
-      var _ret;
-
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              if (!(sortState == _sortingState.sortingState.sorting)) {
-                _context3.next = 5;
-                break;
-              }
-
-              return _context3.delegateYield( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-                var mergedArray, i, j, _loop, _i;
-
-                return regeneratorRuntime.wrap(function _callee2$(_context2) {
-                  while (1) {
-                    switch (_context2.prev = _context2.next) {
-                      case 0:
-                        mergedArray = [];
-                        i = 0;
-                        j = 0; //Two finger method
-
-                      case 3:
-                        if (!(i < leftArr.length && j < rightArr.length)) {
-                          _context2.next = 8;
-                          break;
-                        }
-
-                        _context2.next = 6;
-                        return sleepDuration(config.ComparisonTime).then(function () {
-                          if (leftArr[i] < rightArr[j]) mergedArray.push(leftArr[i++]);else mergedArray.push(rightArr[j++]);
-                          dispatch(_sortEvent.sortEvent.ItemScanned, {
-                            indexOne: startIndex + mergedArray.length,
-                            indexTwo: startIndex
-                          });
-                        });
-
-                      case 6:
-                        _context2.next = 3;
-                        break;
-
-                      case 8:
-                        mergedArray = mergedArray.concat(leftArr.slice(i).concat(rightArr.slice(j)));
-
-                        _loop = function _loop(_i) {
-                          sleepDuration(config.SwapTime).then(function (resolve) {
-                            array[_i + startIndex] = mergedArray[_i];
-                            dispatch(_sortEvent.sortEvent.ItemSwapped, {
-                              indexOne: _i + startIndex
-                            });
-                          });
-                        };
-
-                        for (_i = 0; _i < mergedArray.length && sortState == _sortingState.sortingState.sorting; _i++) {
-                          _loop(_i);
-                        }
-
-                        return _context2.abrupt("return", {
-                          v: mergedArray
-                        });
-
-                      case 12:
-                      case "end":
-                        return _context2.stop();
-                    }
-                  }
-                }, _callee2);
-              })(), "t0", 2);
-
-            case 2:
-              _ret = _context3.t0;
-
-              if (!(_typeof(_ret) === "object")) {
-                _context3.next = 5;
-                break;
-              }
-
-              return _context3.abrupt("return", _ret.v);
-
-            case 5:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3);
-    }));
-
-    return function mergeArrays(_x3, _x4, _x5) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  var partition = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(left, right) {
-      var pivot, i, j;
-      return regeneratorRuntime.wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
             case 0:
               pivot = array[Math.floor((right + left) / 2)]; //middle element
 
@@ -7358,19 +7276,19 @@ function SortManager(n, sortName) {
 
             case 3:
               if (!(i <= j)) {
-                _context4.next = 17;
+                _context.next = 17;
                 break;
               }
 
             case 4:
               if (!(array[i] < pivot && sortState == _sortingState.sortingState.sorting)) {
-                _context4.next = 9;
+                _context.next = 9;
                 break;
               }
 
-              _context4.next = 7;
-              return sleepDuration(config.ComparisonTime).then(function () {
-                dispatch(_sortEvent.sortEvent.ItemScanned, {
+              _context.next = 7;
+              return protectedMethods.sleepDuration(config.ComparisonTime).then(function () {
+                protectedMethods.dispatch(_sortEvent.sortEvent.ItemScanned, {
                   indexOne: i,
                   indexTwo: j
                 });
@@ -7378,18 +7296,18 @@ function SortManager(n, sortName) {
               });
 
             case 7:
-              _context4.next = 4;
+              _context.next = 4;
               break;
 
             case 9:
               if (!(pivot < array[j] && sortState == _sortingState.sortingState.sorting)) {
-                _context4.next = 14;
+                _context.next = 14;
                 break;
               }
 
-              _context4.next = 12;
-              return sleepDuration(config.ComparisonTime).then(function () {
-                dispatch(_sortEvent.sortEvent.ItemScanned, {
+              _context.next = 12;
+              return protectedMethods.sleepDuration(config.ComparisonTime).then(function () {
+                protectedMethods.dispatch(_sortEvent.sortEvent.ItemScanned, {
                   indexOne: i,
                   indexTwo: j
                 });
@@ -7397,14 +7315,14 @@ function SortManager(n, sortName) {
               });
 
             case 12:
-              _context4.next = 9;
+              _context.next = 9;
               break;
 
             case 14:
               //console.log(i + " : " + j);
               if (i <= j) {
                 swap(i, j);
-                dispatch(_sortEvent.sortEvent.ItemSwapped, {
+                protectedMethods.dispatch(_sortEvent.sortEvent.ItemSwapped, {
                   indexOne: i,
                   indexTwo: j
                 });
@@ -7412,13 +7330,127 @@ function SortManager(n, sortName) {
                 j--;
               }
 
-              _context4.next = 3;
+              _context.next = 3;
               break;
 
             case 17:
-              return _context4.abrupt("return", i);
+              return _context.abrupt("return", i);
 
             case 18:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function partition(_x, _x2) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  var quickSort = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(left, right) {
+      var index;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              if (!(array.length > 1)) {
+                _context2.next = 10;
+                break;
+              }
+
+              _context2.next = 3;
+              return partition(left, right);
+
+            case 3:
+              index = _context2.sent;
+
+              if (!(left < index - 1)) {
+                _context2.next = 7;
+                break;
+              }
+
+              _context2.next = 7;
+              return quickSort(left, index - 1);
+
+            case 7:
+              if (!(index < right)) {
+                _context2.next = 10;
+                break;
+              }
+
+              _context2.next = 10;
+              return quickSort(index, right);
+
+            case 10:
+              return _context2.abrupt("return", array);
+
+            case 11:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function quickSort(_x3, _x4) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var heapSort = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return makeMaxHeap();
+
+            case 2:
+              _context3.next = 4;
+              return applyHeapSort();
+
+            case 4:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function heapSort() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var makeMaxHeap = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+      var middle, i;
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              middle = Math.floor(array.length / 2);
+              i = middle;
+
+            case 2:
+              if (!(i >= 0)) {
+                _context4.next = 8;
+                break;
+              }
+
+              _context4.next = 5;
+              return pushToMaxArray(array, i);
+
+            case 5:
+              i--;
+              _context4.next = 2;
+              break;
+
+            case 8:
             case "end":
               return _context4.stop();
           }
@@ -7426,138 +7458,24 @@ function SortManager(n, sortName) {
       }, _callee4);
     }));
 
-    return function partition(_x6, _x7) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-
-  var quickSort = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(left, right) {
-      var index;
-      return regeneratorRuntime.wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              if (!(array.length > 1)) {
-                _context5.next = 10;
-                break;
-              }
-
-              _context5.next = 3;
-              return partition(left, right);
-
-            case 3:
-              index = _context5.sent;
-
-              if (!(left < index - 1)) {
-                _context5.next = 7;
-                break;
-              }
-
-              _context5.next = 7;
-              return quickSort(left, index - 1);
-
-            case 7:
-              if (!(index < right)) {
-                _context5.next = 10;
-                break;
-              }
-
-              _context5.next = 10;
-              return quickSort(index, right);
-
-            case 10:
-              return _context5.abrupt("return", array);
-
-            case 11:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5);
-    }));
-
-    return function quickSort(_x8, _x9) {
+    return function makeMaxHeap() {
       return _ref4.apply(this, arguments);
     };
   }();
 
-  var heapSort = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
-      return regeneratorRuntime.wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              _context6.next = 2;
-              return makeMaxHeap();
-
-            case 2:
-              _context6.next = 4;
-              return applyHeapSort();
-
-            case 4:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, _callee6);
-    }));
-
-    return function heapSort() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-
-  var makeMaxHeap = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
-      var middle, i;
-      return regeneratorRuntime.wrap(function _callee7$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              middle = Math.floor(array.length / 2);
-              i = middle;
-
-            case 2:
-              if (!(i >= 0)) {
-                _context7.next = 8;
-                break;
-              }
-
-              _context7.next = 5;
-              return pushToMaxArray(array, i);
-
-            case 5:
-              i--;
-              _context7.next = 2;
-              break;
-
-            case 8:
-            case "end":
-              return _context7.stop();
-          }
-        }
-      }, _callee7);
-    }));
-
-    return function makeMaxHeap() {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-
   var applyHeapSort = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
       var heapContainer, i;
-      return regeneratorRuntime.wrap(function _callee8$(_context8) {
+      return regeneratorRuntime.wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context8.prev = _context8.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
               heapContainer = _toConsumableArray(array);
               i = 0;
 
             case 2:
               if (!(heapContainer.length > 0)) {
-                _context8.next = 12;
+                _context5.next = 12;
                 break;
               }
 
@@ -7567,65 +7485,65 @@ function SortManager(n, sortName) {
 
               heapContainer.pop();
               pushToMaxArray(heapContainer, 0);
-              _context8.next = 9;
-              return sleepDuration(config.ComparisonTime);
+              _context5.next = 9;
+              return protectedMethods.sleepDuration(config.ComparisonTime);
 
             case 9:
               i++;
-              _context8.next = 2;
+              _context5.next = 2;
               break;
 
             case 12:
             case "end":
-              return _context8.stop();
+              return _context5.stop();
           }
         }
-      }, _callee8);
+      }, _callee5);
     }));
 
     return function applyHeapSort() {
-      return _ref7.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
   var pushToMaxArray = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(array, i) {
-      var leftChildIndex, rightChildInex, maxChildIndex, _ref9;
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(array, i) {
+      var leftChildIndex, rightChildInex, maxChildIndex, _ref7;
 
-      return regeneratorRuntime.wrap(function _callee9$(_context9) {
+      return regeneratorRuntime.wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context9.prev = _context9.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
               leftChildIndex = (i + 1) * 2 - 1;
               rightChildInex = (i + 1) * 2;
               maxChildIndex = array[leftChildIndex] > array[rightChildInex] ? leftChildIndex : rightChildInex; //max of child if element exists, undefined if element has no child
 
               if (!(array[maxChildIndex] != undefined && array[i] < array[maxChildIndex])) {
-                _context9.next = 11;
+                _context6.next = 11;
                 break;
               }
 
-              _ref9 = [array[maxChildIndex], array[i]];
-              array[i] = _ref9[0];
-              array[maxChildIndex] = _ref9[1];
-              dispatch(_sortEvent.sortEvent.ItemSwapped, {
+              _ref7 = [array[maxChildIndex], array[i]];
+              array[i] = _ref7[0];
+              array[maxChildIndex] = _ref7[1];
+              protectedMethods.dispatch(_sortEvent.sortEvent.ItemSwapped, {
                 indexOne: maxChildIndex,
                 indexTwo: i
               });
               pushToMaxArray(array, maxChildIndex);
-              _context9.next = 11;
-              return sleepDuration(config.SwapTime);
+              _context6.next = 11;
+              return protectedMethods.sleepDuration(config.SwapTime);
 
             case 11:
             case "end":
-              return _context9.stop();
+              return _context6.stop();
           }
         }
-      }, _callee9);
+      }, _callee6);
     }));
 
-    return function pushToMaxArray(_x10, _x11) {
-      return _ref8.apply(this, arguments);
+    return function pushToMaxArray(_x5, _x6) {
+      return _ref6.apply(this, arguments);
     };
   }();
 
@@ -7635,101 +7553,99 @@ function SortManager(n, sortName) {
     array[rightIndex] = temp;
   };
 
-  var sleepDuration = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(durationTime) {
-      return regeneratorRuntime.wrap(function _callee10$(_context10) {
+  protectedMethods.sleepDuration = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(durationTime) {
+      return regeneratorRuntime.wrap(function _callee7$(_context7) {
         while (1) {
-          switch (_context10.prev = _context10.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
-              _context10.next = 2;
+              _context7.next = 2;
               return new Promise(function (resolve) {
                 return setTimeout(resolve, durationTime);
               });
 
             case 2:
             case "end":
-              return _context10.stop();
+              return _context7.stop();
           }
         }
-      }, _callee10);
+      }, _callee7);
     }));
 
-    return function sleepDuration(_x12) {
-      return _ref10.apply(this, arguments);
+    return function (_x7) {
+      return _ref8.apply(this, arguments);
     };
   }();
 
-  var protectedMethods = {};
-
   protectedMethods.swapAndDispatch = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(firstIndex, secondIndex) {
-      var _ref12;
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(firstIndex, secondIndex) {
+      var _ref10;
 
-      return regeneratorRuntime.wrap(function _callee11$(_context11) {
+      return regeneratorRuntime.wrap(function _callee8$(_context8) {
         while (1) {
-          switch (_context11.prev = _context11.next) {
+          switch (_context8.prev = _context8.next) {
             case 0:
               if (!(sortState == _sortingState.sortingState.sorting)) {
-                _context11.next = 7;
+                _context8.next = 7;
                 break;
               }
 
-              _context11.next = 3;
-              return sleepDuration(config.SwapTime);
+              _context8.next = 3;
+              return protectedMethods.sleepDuration(config.SwapTime);
 
             case 3:
-              _ref12 = [array[secondIndex], array[firstIndex]];
-              array[firstIndex] = _ref12[0];
-              array[secondIndex] = _ref12[1];
-              dispatch(_sortEvent.sortEvent.ItemSwapped, {
+              _ref10 = [array[secondIndex], array[firstIndex]];
+              array[firstIndex] = _ref10[0];
+              array[secondIndex] = _ref10[1];
+              protectedMethods.dispatch(_sortEvent.sortEvent.ItemSwapped, {
                 indexOne: firstIndex,
                 indexTwo: secondIndex
               });
 
             case 7:
             case "end":
-              return _context11.stop();
+              return _context8.stop();
           }
         }
-      }, _callee11);
+      }, _callee8);
     }));
 
-    return function (_x13, _x14) {
-      return _ref11.apply(this, arguments);
+    return function (_x8, _x9) {
+      return _ref9.apply(this, arguments);
     };
   }();
 
   protectedMethods.compareAndDispatch = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(firstIndex, secondIndex) {
-      return regeneratorRuntime.wrap(function _callee12$(_context12) {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(firstIndex, secondIndex) {
+      return regeneratorRuntime.wrap(function _callee9$(_context9) {
         while (1) {
-          switch (_context12.prev = _context12.next) {
+          switch (_context9.prev = _context9.next) {
             case 0:
               if (!(sortState == _sortingState.sortingState.sorting)) {
-                _context12.next = 5;
+                _context9.next = 5;
                 break;
               }
 
-              _context12.next = 3;
-              return sleepDuration(config.ComparisonTime);
+              _context9.next = 3;
+              return protectedMethods.sleepDuration(config.ComparisonTime);
 
             case 3:
-              dispatch(_sortEvent.sortEvent.ItemScanned, {
+              protectedMethods.dispatch(_sortEvent.sortEvent.ItemScanned, {
                 indexOne: firstIndex,
                 indexTwo: secondIndex
               });
-              return _context12.abrupt("return", array[firstIndex] > array[secondIndex]);
+              return _context9.abrupt("return", array[firstIndex] > array[secondIndex]);
 
             case 5:
             case "end":
-              return _context12.stop();
+              return _context9.stop();
           }
         }
-      }, _callee12);
+      }, _callee9);
     }));
 
-    return function (_x15, _x16) {
-      return _ref13.apply(this, arguments);
+    return function (_x10, _x11) {
+      return _ref11.apply(this, arguments);
     };
   }();
 }

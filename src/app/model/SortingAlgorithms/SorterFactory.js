@@ -10,15 +10,17 @@ export function SorterFactory(context) {
     context.state = sortingState.sorting;
     let sorter;
     switch (currentSortName) {
-      case "Bubble": {
+      case "Bubble":
         sorter = new BubbleSorter();
         break;
-      }
       case "Insertion":
         sorter = new InsertionSorter();
         break;
       case "Selection":
         sorter = new SelectionSorter();
+        break;
+      case "Merge":
+        sorter = new MergeSorter(context);
         break;
     }
     sorter.sortArray.call(context);

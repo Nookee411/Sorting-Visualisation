@@ -22,6 +22,7 @@ export function SortManager(n, sortName) {
   };
   let array = initArray(n);
   let events = {};
+  let protectedMethods = {};
   let sortState = sortingState.stopped;
   let currentSortName = sortName;
 
@@ -54,7 +55,7 @@ export function SortManager(n, sortName) {
     delete events[eventName];
   };
 
-  let dispatch = function (eventName, params) {
+  protectedMethods.dispatch = function (eventName, params) {
     const callback = events[eventName];
     if (callback) {
       callback(params);
@@ -80,9 +81,9 @@ export function SortManager(n, sortName) {
     this.state = sortingState.sorting;
     let ctx = new BubbleSorter();
     switch (currentSortName) {
-      case "Merge":
-        sortResult = mergeSort(array, 0);
-        break;
+      // case "Merge":
+      //   sortResult = mergeSort(array, 0);
+      //   break;
       case "Quick":
         sortResult = quickSort(0, array.length - 1);
         break;
@@ -93,58 +94,62 @@ export function SortManager(n, sortName) {
         sorter.applySort(currentSortName);
         break;
     }
-    sortResult.then(() => dispatch(sortEvent.SortingFinished, {}));
+    // sortResult.then(() =>
+    //   protectedMethods.dispatch(sortEvent.SortingFinished, {})
+    // );
   };
 
-  let mergeSort = async function (splittedArray, startIndex) {
-    //recursion exit if array contains only one value
+  // let mergeSort = async function (splittedArray, startIndex) {
+  //   //recursion exit if array contains only one value
 
-    if (splittedArray.length <= 1) return splittedArray;
-    let middle = Math.floor(splittedArray.length / 2);
-    let leftArr = splittedArray.slice(0, middle);
-    let rightArr = splittedArray.slice(middle);
+  //   if (splittedArray.length <= 1) return splittedArray;
+  //   let middle = Math.floor(splittedArray.length / 2);
+  //   let leftArr = splittedArray.slice(0, middle);
+  //   let rightArr = splittedArray.slice(middle);
 
-    return mergeArrays(
-      await mergeSort(leftArr, startIndex),
-      await mergeSort(rightArr, startIndex + middle),
-      startIndex
-    );
-  };
+  //   return mergeArrays(
+  //     await mergeSort(leftArr, startIndex),
+  //     await mergeSort(rightArr, startIndex + middle),
+  //     startIndex
+  //   );
+  // };
 
-  let mergeArrays = async function (leftArr, rightArr, startIndex) {
-    if (sortState == sortingState.sorting) {
-      let mergedArray = [];
-      let i = 0;
-      let j = 0;
-      //Two finger method
-      while (i < leftArr.length && j < rightArr.length) {
-        //setting pause before each iteration
-        //Comparator usage
-        await sleepDuration(config.ComparisonTime).then(() => {
-          if (leftArr[i] < rightArr[j]) mergedArray.push(leftArr[i++]);
-          else mergedArray.push(rightArr[j++]);
-          dispatch(sortEvent.ItemScanned, {
-            indexOne: startIndex + mergedArray.length,
-            indexTwo: startIndex,
-          });
-        });
-      }
-      mergedArray = mergedArray.concat(
-        leftArr.slice(i).concat(rightArr.slice(j))
-      );
-      for (
-        let i = 0;
-        i < mergedArray.length && sortState == sortingState.sorting;
-        i++
-      ) {
-        sleepDuration(config.SwapTime).then((resolve) => {
-          array[i + startIndex] = mergedArray[i];
-          dispatch(sortEvent.ItemSwapped, { indexOne: i + startIndex });
-        });
-      }
-      return mergedArray;
-    }
-  };
+  // let mergeArrays = async function (leftArr, rightArr, startIndex) {
+  //   if (sortState == sortingState.sorting) {
+  //     let mergedArray = [];
+  //     let i = 0;
+  //     let j = 0;
+  //     //Two finger method
+  //     while (i < leftArr.length && j < rightArr.length) {
+  //       //setting pause before each iteration
+  //       //Comparator usage
+  //       await protectedMethods.sleepDuration(config.ComparisonTime).then(() => {
+  //         if (leftArr[i] < rightArr[j]) mergedArray.push(leftArr[i++]);
+  //         else mergedArray.push(rightArr[j++]);
+  //         protectedMethods.dispatch(sortEvent.ItemScanned, {
+  //           indexOne: startIndex + mergedArray.length,
+  //           indexTwo: startIndex,
+  //         });
+  //       });
+  //     }
+  //     mergedArray = mergedArray.concat(
+  //       leftArr.slice(i).concat(rightArr.slice(j))
+  //     );
+  //     for (
+  //       let i = 0;
+  //       i < mergedArray.length && sortState == sortingState.sorting;
+  //       i++
+  //     ) {
+  //       protectedMethods.sleepDuration(config.SwapTime).then((resolve) => {
+  //         array[i + startIndex] = mergedArray[i];
+  //         protectedMethods.dispatch(sortEvent.ItemSwapped, {
+  //           indexOne: i + startIndex,
+  //         });
+  //       });
+  //     }
+  //     return mergedArray;
+  //   }
+  // };
 
   let partition = async function (left, right) {
     let pivot = array[Math.floor((right + left) / 2)]; //middle element
@@ -152,21 +157,30 @@ export function SortManager(n, sortName) {
     let j = right; //right pointer
     while (i <= j) {
       while (array[i] < pivot && sortState == sortingState.sorting) {
-        await sleepDuration(config.ComparisonTime).then(() => {
-          dispatch(sortEvent.ItemScanned, { indexOne: i, indexTwo: j });
+        await protectedMethods.sleepDuration(config.ComparisonTime).then(() => {
+          protectedMethods.dispatch(sortEvent.ItemScanned, {
+            indexOne: i,
+            indexTwo: j,
+          });
           i++;
         });
       }
       while (pivot < array[j] && sortState == sortingState.sorting) {
-        await sleepDuration(config.ComparisonTime).then(() => {
-          dispatch(sortEvent.ItemScanned, { indexOne: i, indexTwo: j });
+        await protectedMethods.sleepDuration(config.ComparisonTime).then(() => {
+          protectedMethods.dispatch(sortEvent.ItemScanned, {
+            indexOne: i,
+            indexTwo: j,
+          });
           j--;
         });
       }
       //console.log(i + " : " + j);
       if (i <= j) {
         swap(i, j);
-        dispatch(sortEvent.ItemSwapped, { indexOne: i, indexTwo: j });
+        protectedMethods.dispatch(sortEvent.ItemSwapped, {
+          indexOne: i,
+          indexTwo: j,
+        });
         i++;
         j--;
       }
@@ -209,7 +223,7 @@ export function SortManager(n, sortName) {
       heapContainer[0] = heapContainer[heapContainer.length - 1]; //swap small element to the top
       heapContainer.pop();
       pushToMaxArray(heapContainer, 0);
-      await sleepDuration(config.ComparisonTime);
+      await protectedMethods.sleepDuration(config.ComparisonTime);
       // dispatch(sortEvent.ItemSwapped, { indexOne: i });
     }
   };
@@ -224,9 +238,12 @@ export function SortManager(n, sortName) {
 
     if (array[maxChildIndex] != undefined && array[i] < array[maxChildIndex]) {
       [array[i], array[maxChildIndex]] = [array[maxChildIndex], array[i]];
-      dispatch(sortEvent.ItemSwapped, { indexOne: maxChildIndex, indexTwo: i });
+      protectedMethods.dispatch(sortEvent.ItemSwapped, {
+        indexOne: maxChildIndex,
+        indexTwo: i,
+      });
       pushToMaxArray(array, maxChildIndex);
-      await sleepDuration(config.SwapTime);
+      await protectedMethods.sleepDuration(config.SwapTime);
     }
   };
 
@@ -236,20 +253,18 @@ export function SortManager(n, sortName) {
     array[rightIndex] = temp;
   };
 
-  let sleepDuration = async function (durationTime) {
+  protectedMethods.sleepDuration = async function (durationTime) {
     await new Promise((resolve) => setTimeout(resolve, durationTime));
   };
 
-  let protectedMethods = {};
-
   protectedMethods.swapAndDispatch = async function (firstIndex, secondIndex) {
     if (sortState == sortingState.sorting) {
-      await sleepDuration(config.SwapTime);
+      await protectedMethods.sleepDuration(config.SwapTime);
       [array[firstIndex], array[secondIndex]] = [
         array[secondIndex],
         array[firstIndex],
       ];
-      dispatch(sortEvent.ItemSwapped, {
+      protectedMethods.dispatch(sortEvent.ItemSwapped, {
         indexOne: firstIndex,
         indexTwo: secondIndex,
       });
@@ -261,8 +276,8 @@ export function SortManager(n, sortName) {
     secondIndex
   ) {
     if (sortState == sortingState.sorting) {
-      await sleepDuration(config.ComparisonTime);
-      dispatch(sortEvent.ItemScanned, {
+      await protectedMethods.sleepDuration(config.ComparisonTime);
+      protectedMethods.dispatch(sortEvent.ItemScanned, {
         indexOne: firstIndex,
         indexTwo: secondIndex,
       });
