@@ -1,4 +1,5 @@
 import { max } from "moment";
+import { SorterFactory } from "../SortingAlgorithms/SorterFactory";
 import { sortEvent } from "./constants/sortEvent";
 import { sortingState } from "./constants/sortingState";
 import { BubbleSorter } from "./Sorter";
@@ -74,20 +75,11 @@ export function SortManager(n, sortName) {
   };
 
   this.applySort = function () {
+    let sorter = new SorterFactory(Object.assign(this, protectedMethods));
     let sortResult;
     this.state = sortingState.sorting;
     let ctx = new BubbleSorter();
     switch (currentSortName) {
-      case "Bubble": {
-        sortResult = ctx.sortArray.call(this);
-        break;
-      }
-      case "Insertion":
-        sortResult = insertionSort();
-        break;
-      case "Selection":
-        sortResult = selectionSort();
-        break;
       case "Merge":
         sortResult = mergeSort(array, 0);
         break;
@@ -96,59 +88,12 @@ export function SortManager(n, sortName) {
         break;
       case "Heap":
         sortResult = heapSort();
+        break;
+      default:
+        sorter.applySort(currentSortName);
+        break;
     }
     sortResult.then(() => dispatch(sortEvent.SortingFinished, {}));
-  };
-
-  let bubbleSort = async function () {
-    for (let i = 0; i < array.length; i++) {
-      for (let j = 0; j < array.length - i - 1; j++) {
-        if (sortState == sortingState.sorting) {
-          if (await compareAndDispatch(j, j + 1))
-            await swapAndDispatch(j, j + 1);
-        }
-      }
-    }
-  };
-
-  let selectionSort = async function () {
-    for (
-      let i = 0;
-      i < array.length && sortState == sortingState.sorting;
-      i++
-    ) {
-      let res = await findMaxValue(i);
-      await swapAndDispatch(i, res);
-    }
-
-    async function findMaxValue(startIndex) {
-      // let maxValue = Number.MIN_SAFE_INTEGER;
-      let maxIndex = startIndex;
-      for (let i = startIndex; i < array.length; i++) {
-        if (sortState == sortingState.sorting) {
-          if (await compareAndDispatch(i, maxIndex)) {
-            maxIndex = i;
-            // maxValue = array[i];
-          }
-        }
-      }
-      return maxIndex;
-    }
-  };
-
-  let insertionSort = async function () {
-    //Taking each element to the left until it starts to fit comparer
-
-    for (let i = 1; i < array.length; i++) {
-      let indexOfEle = i;
-      while (
-        indexOfEle > 0 &&
-        (await compareAndDispatch(indexOfEle, indexOfEle - 1))
-      ) {
-        await swapAndDispatch(indexOfEle - 1, indexOfEle);
-        indexOfEle--;
-      }
-    }
   };
 
   let mergeSort = async function (splittedArray, startIndex) {
@@ -246,7 +191,6 @@ export function SortManager(n, sortName) {
   };
 
   let heapSort = async function () {
-    // console.log(sortState);
     await makeMaxHeap();
     await applyHeapSort();
   };
@@ -296,7 +240,9 @@ export function SortManager(n, sortName) {
     await new Promise((resolve) => setTimeout(resolve, durationTime));
   };
 
-  let swapAndDispatch = async function (firstIndex, secondIndex) {
+  let protectedMethods = {};
+
+  protectedMethods.swapAndDispatch = async function (firstIndex, secondIndex) {
     if (sortState == sortingState.sorting) {
       await sleepDuration(config.SwapTime);
       [array[firstIndex], array[secondIndex]] = [
@@ -310,7 +256,10 @@ export function SortManager(n, sortName) {
     }
   };
 
-  let compareAndDispatch = async function (firstIndex, secondIndex) {
+  protectedMethods.compareAndDispatch = async function (
+    firstIndex,
+    secondIndex
+  ) {
     if (sortState == sortingState.sorting) {
       await sleepDuration(config.ComparisonTime);
       dispatch(sortEvent.ItemScanned, {
