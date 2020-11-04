@@ -1,0 +1,147 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #333;
+  font-family: "Open Sans", sans-serif;
+}
+header,
+footer {
+  background-color: #222;
+  height: 10vh;
+  color: cadetblue;
+  letter-spacing: 1.5px;
+  font-size: 1rem;
+  text-align: center;
+}
+header {
+  height: auto;
+}
+.menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.menu_item {
+  font-family: inherit;
+  letter-spacing: 1px;
+  font-size: inherit;
+
+  outline: none;
+  width: 100%;
+  height: 7vh;
+  cursor: default;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #222222;
+  color: cadetblue;
+  border: 0;
+  transition-duration: 0.7s;
+  /* overflow: hidden; */
+}
+
+.menu_item:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.menu_item:active {
+  box-shadow: 1 1 0 10px pink;
+}
+
+.foldMenu__item {
+  display: none;
+  border-top: 1px solid gray;
+}
+.active {
+  background-color: DeepPink;
+  color: #222222;
+}
+.foldMenu ul {
+  position: absolute;
+  background-color: #222222;
+  width: 25%;
+  left: 0;
+  top: 7vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  padding-left: 0;
+}
+.foldMenu__item:hover {
+  background-color: #aaaaaa;
+}
+
+.foldMenu:hover .foldMenu__item {
+  display: flex;
+  transition-duration: 0.5s;
+}
+.wrapper {
+  height: 83vh;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.visualizer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  max-width: 80%;
+  min-width: 50%;
+  background-color: #333;
+  margin: 20px;
+}
+
+#slider {
+  color: cadetblue;
+  background: pink;
+  border: solid 1px cadetblue;
+  border-radius: 8px;
+  height: 18px;
+  max-width: 100%;
+  min-width: 100px;
+  outline: none;
+  transition: background 450ms ease-in;
+  -webkit-appearance: none;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 10vh;
+}
+
+.statusBar {
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.statusBar_item {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#clickName {
+  display: block;
+}
+
+
+/*# sourceMappingURL=/styles.956d002c.css.map */

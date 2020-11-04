@@ -1,13 +1,13 @@
 import { max } from "moment";
 import { sortEvent } from "./constants/sortEvent";
 import { sortingState } from "./constants/sortingState";
+import { BubbleSorter } from "./Sorter";
 
 const config = {
   ComparisonTime: 20,
   SwapTime: 100,
 };
 
-//TODO Change sorting visualisation
 export function SortManager(n, sortName) {
   let getRandomValue = function (min, max) {
     return Math.round(Math.random() * (max - min) + min);
@@ -76,9 +76,10 @@ export function SortManager(n, sortName) {
   this.applySort = function () {
     let sortResult;
     this.state = sortingState.sorting;
+    let ctx = new BubbleSorter();
     switch (currentSortName) {
       case "Bubble": {
-        sortResult = bubbleSort();
+        sortResult = ctx.sortArray.call(this);
         break;
       }
       case "Insertion":
