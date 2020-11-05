@@ -6555,61 +6555,64 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function BubbleSorter() {
-  this.sortArray = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var array, i, j;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            array = this.getArray();
-            i = 0;
+  this.sortArray = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(context) {
+      var array, i, j;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              array = context.getArray();
+              i = 0;
 
-          case 2:
-            if (!(i < array.length)) {
-              _context.next = 16;
-              break;
-            }
+            case 2:
+              if (!(i < array.length)) {
+                _context.next = 16;
+                break;
+              }
 
-            j = 0;
+              j = 0;
 
-          case 4:
-            if (!(j < array.length - i - 1)) {
-              _context.next = 13;
-              break;
-            }
+            case 4:
+              if (!(j < array.length - i - 1)) {
+                _context.next = 13;
+                break;
+              }
 
-            _context.next = 7;
-            return this.compareAndDispatch(j, j + 1);
+              _context.next = 7;
+              return context.compareAndDispatch(j, j + 1);
 
-          case 7:
-            if (!_context.sent) {
+            case 7:
+              if (!_context.sent) {
+                _context.next = 10;
+                break;
+              }
+
               _context.next = 10;
+              return context.swapAndDispatch(j, j + 1);
+
+            case 10:
+              j++;
+              _context.next = 4;
               break;
-            }
 
-            _context.next = 10;
-            return this.swapAndDispatch(j, j + 1);
+            case 13:
+              i++;
+              _context.next = 2;
+              break;
 
-          case 10:
-            j++;
-            _context.next = 4;
-            break;
-
-          case 13:
-            i++;
-            _context.next = 2;
-            break;
-
-          case 16:
-            console.log(array);
-
-          case 17:
-          case "end":
-            return _context.stop();
+            case 16:
+            case "end":
+              return _context.stop();
+          }
         }
-      }
-    }, _callee, this);
-  }));
+      }, _callee);
+    }));
+
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
 }
 },{}],"app/model/SortingAlgorithms/InsertionSorter.js":[function(require,module,exports) {
 "use strict";
@@ -6954,6 +6957,393 @@ function MergeSorter(context) {
     }, _callee3);
   }));
 }
+},{"../core/constants/sortEvent":"app/model/core/constants/sortEvent.js","../core/constants/sortingState":"app/model/core/constants/sortingState.js"}],"app/model/SortingAlgorithms/QuickSorter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.QuickSorter = QuickSorter;
+
+var _sortEvent = require("../core/constants/sortEvent");
+
+var _sortingState = require("../core/constants/sortingState");
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function QuickSorter(context) {
+  var array;
+  this.sortArray = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+    var partition, _partition, quickSort, _quickSort, swap;
+
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            swap = function _swap(leftIndex, rightIndex) {
+              var temp = array[leftIndex];
+              array[leftIndex] = array[rightIndex];
+              array[rightIndex] = temp;
+            };
+
+            _quickSort = function _quickSort3() {
+              _quickSort = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(left, right) {
+                var index;
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                  while (1) {
+                    switch (_context2.prev = _context2.next) {
+                      case 0:
+                        if (!(array.length > 1)) {
+                          _context2.next = 10;
+                          break;
+                        }
+
+                        _context2.next = 3;
+                        return partition(left, right);
+
+                      case 3:
+                        index = _context2.sent;
+
+                        if (!(left < index - 1)) {
+                          _context2.next = 7;
+                          break;
+                        }
+
+                        _context2.next = 7;
+                        return quickSort(left, index - 1);
+
+                      case 7:
+                        if (!(index < right)) {
+                          _context2.next = 10;
+                          break;
+                        }
+
+                        _context2.next = 10;
+                        return quickSort(index, right);
+
+                      case 10:
+                        return _context2.abrupt("return", array);
+
+                      case 11:
+                      case "end":
+                        return _context2.stop();
+                    }
+                  }
+                }, _callee2);
+              }));
+              return _quickSort.apply(this, arguments);
+            };
+
+            quickSort = function _quickSort2(_x3, _x4) {
+              return _quickSort.apply(this, arguments);
+            };
+
+            _partition = function _partition3() {
+              _partition = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(left, right) {
+                var pivot, i, j;
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        pivot = array[Math.floor((right + left) / 2)]; //middle element
+
+                        i = left; //left pointer
+
+                        j = right; //right pointer
+
+                      case 3:
+                        if (!(i <= j)) {
+                          _context.next = 17;
+                          break;
+                        }
+
+                      case 4:
+                        if (!(array[i] < pivot && context.state == _sortingState.sortingState.sorting)) {
+                          _context.next = 9;
+                          break;
+                        }
+
+                        _context.next = 7;
+                        return context.sleepDuration(20).then(function () {
+                          context.dispatch(_sortEvent.sortEvent.ItemScanned, {
+                            indexOne: i,
+                            indexTwo: j
+                          });
+                          i++;
+                        });
+
+                      case 7:
+                        _context.next = 4;
+                        break;
+
+                      case 9:
+                        if (!(pivot < array[j] && context.state == _sortingState.sortingState.sorting)) {
+                          _context.next = 14;
+                          break;
+                        }
+
+                        _context.next = 12;
+                        return context.sleepDuration(20).then(function () {
+                          context.dispatch(_sortEvent.sortEvent.ItemScanned, {
+                            indexOne: i,
+                            indexTwo: j
+                          });
+                          j--;
+                        });
+
+                      case 12:
+                        _context.next = 9;
+                        break;
+
+                      case 14:
+                        //console.log(i + " : " + j);
+                        if (i <= j) {
+                          swap(i, j);
+                          context.dispatch(_sortEvent.sortEvent.ItemSwapped, {
+                            indexOne: i,
+                            indexTwo: j
+                          });
+                          i++;
+                          j--;
+                        }
+
+                        _context.next = 3;
+                        break;
+
+                      case 17:
+                        return _context.abrupt("return", i);
+
+                      case 18:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                }, _callee);
+              }));
+              return _partition.apply(this, arguments);
+            };
+
+            partition = function _partition2(_x, _x2) {
+              return _partition.apply(this, arguments);
+            };
+
+            array = context.getArray();
+            quickSort(0, array.length - 1);
+
+          case 7:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+}
+},{"../core/constants/sortEvent":"app/model/core/constants/sortEvent.js","../core/constants/sortingState":"app/model/core/constants/sortingState.js"}],"app/model/SortingAlgorithms/HeapSorter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.HeapSorter = HeapSorter;
+
+var _sortEvent = require("../core/constants/sortEvent");
+
+var _sortingState = require("../core/constants/sortingState");
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function HeapSorter(context) {
+  var array;
+  this.sortArray = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+    var heapSort, _heapSort, makeMaxHeap, _makeMaxHeap, applyHeapSort, _applyHeapSort, pushToMaxArray, _pushToMaxArray;
+
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _pushToMaxArray = function _pushToMaxArray3() {
+              _pushToMaxArray = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(array, i) {
+                var leftChildIndex, rightChildInex, maxChildIndex, _ref2;
+
+                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                  while (1) {
+                    switch (_context4.prev = _context4.next) {
+                      case 0:
+                        leftChildIndex = (i + 1) * 2 - 1;
+                        rightChildInex = (i + 1) * 2;
+                        maxChildIndex = array[leftChildIndex] > array[rightChildInex] ? leftChildIndex : rightChildInex; //max of child if element exists, undefined if element has no child
+
+                        if (!(array[maxChildIndex] != undefined && array[i] < array[maxChildIndex])) {
+                          _context4.next = 11;
+                          break;
+                        }
+
+                        _ref2 = [array[maxChildIndex], array[i]];
+                        array[i] = _ref2[0];
+                        array[maxChildIndex] = _ref2[1];
+                        context.dispatch(_sortEvent.sortEvent.ItemSwapped, {
+                          indexOne: maxChildIndex,
+                          indexTwo: i
+                        });
+                        pushToMaxArray(array, maxChildIndex);
+                        _context4.next = 11;
+                        return context.sleepDuration(100);
+
+                      case 11:
+                      case "end":
+                        return _context4.stop();
+                    }
+                  }
+                }, _callee4);
+              }));
+              return _pushToMaxArray.apply(this, arguments);
+            };
+
+            pushToMaxArray = function _pushToMaxArray2(_x, _x2) {
+              return _pushToMaxArray.apply(this, arguments);
+            };
+
+            _applyHeapSort = function _applyHeapSort3() {
+              _applyHeapSort = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+                var heapContainer, i;
+                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                  while (1) {
+                    switch (_context3.prev = _context3.next) {
+                      case 0:
+                        heapContainer = _toConsumableArray(array);
+                        i = 0;
+
+                      case 2:
+                        if (!(heapContainer.length > 0)) {
+                          _context3.next = 13;
+                          break;
+                        }
+
+                        array[i] = heapContainer[0]; //Extracting max
+
+                        heapContainer[0] = heapContainer[heapContainer.length - 1]; //swap small element to the top
+
+                        heapContainer.pop();
+                        pushToMaxArray(heapContainer, 0);
+                        _context3.next = 9;
+                        return context.sleepDuration(20);
+
+                      case 9:
+                        context.dispatch(_sortEvent.sortEvent.ItemSwapped, {
+                          indexOne: i
+                        });
+
+                      case 10:
+                        i++;
+                        _context3.next = 2;
+                        break;
+
+                      case 13:
+                      case "end":
+                        return _context3.stop();
+                    }
+                  }
+                }, _callee3);
+              }));
+              return _applyHeapSort.apply(this, arguments);
+            };
+
+            applyHeapSort = function _applyHeapSort2() {
+              return _applyHeapSort.apply(this, arguments);
+            };
+
+            _makeMaxHeap = function _makeMaxHeap3() {
+              _makeMaxHeap = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+                var middle, i;
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                  while (1) {
+                    switch (_context2.prev = _context2.next) {
+                      case 0:
+                        middle = Math.floor(array.length / 2);
+                        i = middle;
+
+                      case 2:
+                        if (!(i >= 0)) {
+                          _context2.next = 8;
+                          break;
+                        }
+
+                        _context2.next = 5;
+                        return pushToMaxArray(array, i);
+
+                      case 5:
+                        i--;
+                        _context2.next = 2;
+                        break;
+
+                      case 8:
+                      case "end":
+                        return _context2.stop();
+                    }
+                  }
+                }, _callee2);
+              }));
+              return _makeMaxHeap.apply(this, arguments);
+            };
+
+            makeMaxHeap = function _makeMaxHeap2() {
+              return _makeMaxHeap.apply(this, arguments);
+            };
+
+            _heapSort = function _heapSort3() {
+              _heapSort = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        _context.next = 2;
+                        return makeMaxHeap();
+
+                      case 2:
+                        _context.next = 4;
+                        return applyHeapSort();
+
+                      case 4:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                }, _callee);
+              }));
+              return _heapSort.apply(this, arguments);
+            };
+
+            heapSort = function _heapSort2() {
+              return _heapSort.apply(this, arguments);
+            };
+
+            array = context.getArray();
+            heapSort();
+
+          case 10:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+}
 },{"../core/constants/sortEvent":"app/model/core/constants/sortEvent.js","../core/constants/sortingState":"app/model/core/constants/sortingState.js"}],"app/model/SortingAlgorithms/SorterFactory.js":[function(require,module,exports) {
 "use strict";
 
@@ -6972,35 +7362,75 @@ var _SelectionSorter = require("./SelectionSorter");
 
 var _MergeSorter = require("./MergeSorter");
 
+var _QuickSorter = require("./QuickSorter");
+
+var _HeapSorter = require("./HeapSorter");
+
+var _sortEvent = require("../core/constants/sortEvent");
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function SorterFactory(context) {
-  this.applySort = function (currentSortName) {
-    var sortResult;
-    context.state = _sortingState.sortingState.sorting;
-    var sorter;
+  this.applySort = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(currentSortName) {
+      var sortResult, sorter;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              context.state = _sortingState.sortingState.sorting;
+              _context.t0 = currentSortName;
+              _context.next = _context.t0 === "Bubble" ? 4 : _context.t0 === "Insertion" ? 6 : _context.t0 === "Selection" ? 8 : _context.t0 === "Merge" ? 10 : _context.t0 === "Quick" ? 12 : _context.t0 === "Heap" ? 13 : 14;
+              break;
 
-    switch (currentSortName) {
-      case "Bubble":
-        sorter = new _BubbleSorter.BubbleSorter();
-        break;
+            case 4:
+              sorter = new _BubbleSorter.BubbleSorter(context);
+              return _context.abrupt("break", 14);
 
-      case "Insertion":
-        sorter = new _InsertionSorter.InsertionSorter();
-        break;
+            case 6:
+              sorter = new _InsertionSorter.InsertionSorter();
+              return _context.abrupt("break", 14);
 
-      case "Selection":
-        sorter = new _SelectionSorter.SelectionSorter();
-        break;
+            case 8:
+              sorter = new _SelectionSorter.SelectionSorter();
+              return _context.abrupt("break", 14);
 
-      case "Merge":
-        sorter = new _MergeSorter.MergeSorter(context);
-        break;
-    }
+            case 10:
+              sorter = new _MergeSorter.MergeSorter(context);
+              return _context.abrupt("break", 14);
 
-    sorter.sortArray.call(context);
-    return sortResult;
-  };
+            case 12:
+              sorter = new _QuickSorter.QuickSorter(context);
+
+            case 13:
+              sorter = new _HeapSorter.HeapSorter(context);
+
+            case 14:
+              _context.next = 16;
+              return sorter.sortArray.call(context);
+
+            case 16:
+              sortResult = _context.sent;
+              console.log(sortResult); // sortResult.then(() => context.dispatch(sortEvent.SortingFinished, {}));
+
+              return _context.abrupt("return", sortResult);
+
+            case 19:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
 }
-},{"./BubbleSorter":"app/model/SortingAlgorithms/BubbleSorter.js","./InsertionSorter":"app/model/SortingAlgorithms/InsertionSorter.js","../core/constants/sortingState":"app/model/core/constants/sortingState.js","./SelectionSorter":"app/model/SortingAlgorithms/SelectionSorter.js","./MergeSorter":"app/model/SortingAlgorithms/MergeSorter.js"}],"app/model/core/Sorter.js":[function(require,module,exports) {
+},{"./BubbleSorter":"app/model/SortingAlgorithms/BubbleSorter.js","./InsertionSorter":"app/model/SortingAlgorithms/InsertionSorter.js","../core/constants/sortingState":"app/model/core/constants/sortingState.js","./SelectionSorter":"app/model/SortingAlgorithms/SelectionSorter.js","./MergeSorter":"app/model/SortingAlgorithms/MergeSorter.js","./QuickSorter":"app/model/SortingAlgorithms/QuickSorter.js","./HeapSorter":"app/model/SortingAlgorithms/HeapSorter.js","../core/constants/sortEvent":"app/model/core/constants/sortEvent.js"}],"app/model/core/Sorter.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7196,14 +7626,12 @@ function SortManager(n, sortName) {
       // case "Merge":
       //   sortResult = mergeSort(array, 0);
       //   break;
-      case "Quick":
-        sortResult = quickSort(0, array.length - 1);
-        break;
-
-      case "Heap":
-        sortResult = heapSort();
-        break;
-
+      // case "Quick":
+      //   sortResult = quickSort(0, array.length - 1);
+      //   break;
+      // case "Heap":
+      //   sortResult = heapSort();
+      //   break;
       default:
         sorter.applySort(currentSortName);
         break;
@@ -7211,55 +7639,7 @@ function SortManager(n, sortName) {
     //   protectedMethods.dispatch(sortEvent.SortingFinished, {})
     // );
 
-  }; // let mergeSort = async function (splittedArray, startIndex) {
-  //   //recursion exit if array contains only one value
-  //   if (splittedArray.length <= 1) return splittedArray;
-  //   let middle = Math.floor(splittedArray.length / 2);
-  //   let leftArr = splittedArray.slice(0, middle);
-  //   let rightArr = splittedArray.slice(middle);
-  //   return mergeArrays(
-  //     await mergeSort(leftArr, startIndex),
-  //     await mergeSort(rightArr, startIndex + middle),
-  //     startIndex
-  //   );
-  // };
-  // let mergeArrays = async function (leftArr, rightArr, startIndex) {
-  //   if (sortState == sortingState.sorting) {
-  //     let mergedArray = [];
-  //     let i = 0;
-  //     let j = 0;
-  //     //Two finger method
-  //     while (i < leftArr.length && j < rightArr.length) {
-  //       //setting pause before each iteration
-  //       //Comparator usage
-  //       await protectedMethods.sleepDuration(config.ComparisonTime).then(() => {
-  //         if (leftArr[i] < rightArr[j]) mergedArray.push(leftArr[i++]);
-  //         else mergedArray.push(rightArr[j++]);
-  //         protectedMethods.dispatch(sortEvent.ItemScanned, {
-  //           indexOne: startIndex + mergedArray.length,
-  //           indexTwo: startIndex,
-  //         });
-  //       });
-  //     }
-  //     mergedArray = mergedArray.concat(
-  //       leftArr.slice(i).concat(rightArr.slice(j))
-  //     );
-  //     for (
-  //       let i = 0;
-  //       i < mergedArray.length && sortState == sortingState.sorting;
-  //       i++
-  //     ) {
-  //       protectedMethods.sleepDuration(config.SwapTime).then((resolve) => {
-  //         array[i + startIndex] = mergedArray[i];
-  //         protectedMethods.dispatch(sortEvent.ItemSwapped, {
-  //           indexOne: i + startIndex,
-  //         });
-  //       });
-  //     }
-  //     return mergedArray;
-  //   }
-  // };
-
+  };
 
   var partition = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(left, right) {
