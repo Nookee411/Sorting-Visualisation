@@ -6,7 +6,7 @@ export function QuickSorter(context) {
 
   this.sortArray = async function () {
     array = context.getArray();
-    quickSort(0, array.length - 1);
+    await quickSort(0, array.length - 1);
 
     async function partition(left, right) {
       let pivot = array[Math.floor((right + left) / 2)]; //middle element

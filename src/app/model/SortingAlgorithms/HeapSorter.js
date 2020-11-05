@@ -1,5 +1,6 @@
 import { sortEvent } from "../core/constants/sortEvent";
 import { sortingState } from "../core/constants/sortingState";
+import { config } from "../core/config";
 
 export function HeapSorter(context) {
   let array;
@@ -7,7 +8,7 @@ export function HeapSorter(context) {
   this.sortArray = async function () {
     array = context.getArray();
 
-    heapSort();
+    await heapSort();
 
     async function heapSort() {
       await makeMaxHeap();
@@ -28,7 +29,7 @@ export function HeapSorter(context) {
         heapContainer[0] = heapContainer[heapContainer.length - 1]; //swap small element to the top
         heapContainer.pop();
         pushToMaxArray(heapContainer, 0);
-        await context.sleepDuration(20);
+        await context.sleepDuration(config.ComparisonTime);
         context.dispatch(sortEvent.ItemSwapped, { indexOne: i });
       }
     }
@@ -51,7 +52,7 @@ export function HeapSorter(context) {
           indexTwo: i,
         });
         pushToMaxArray(array, maxChildIndex);
-        await context.sleepDuration(100);
+        await context.sleepDuration(config.SwapTime);
       }
     }
   };

@@ -1,14 +1,14 @@
 import { sortEvent } from "../core/constants/sortEvent";
 import { sortingState } from "../core/constants/sortingState";
+import { config } from "../core/config";
 
 export function MergeSorter(context) {
   let array;
   this.sortArray = async function () {
     array = context.getArray();
-    mergeSort(array, 0);
+    await mergeSort(array, 0);
 
     async function mergeSort(splittedArray, startIndex) {
-      console.log(splittedArray);
       //recursion exit if array contains only one value
       if (splittedArray.length <= 1) return splittedArray;
       let middle = Math.floor(splittedArray.length / 2);
@@ -29,7 +29,7 @@ export function MergeSorter(context) {
       while (i < leftArr.length && j < rightArr.length) {
         //setting pause before each iteration
         //Comparator usage
-        await context.sleepDuration(100).then(() => {
+        await context.sleepDuration(config.ComparisonTime).then(() => {
           if (leftArr[i] < rightArr[j]) mergedArray.push(leftArr[i++]);
           else mergedArray.push(rightArr[j++]);
           context.dispatch(sortEvent.ItemScanned, {
@@ -46,7 +46,7 @@ export function MergeSorter(context) {
         i < mergedArray.length && context.state == sortingState.sorting;
         i++
       ) {
-        context.sleepDuration(100).then((resolve) => {
+        context.sleepDuration(config.SwapTime).then((resolve) => {
           array[i + startIndex] = mergedArray[i];
           context.dispatch(sortEvent.ItemSwapped, { indexOne: i + startIndex });
         });

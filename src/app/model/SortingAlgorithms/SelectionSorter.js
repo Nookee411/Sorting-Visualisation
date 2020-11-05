@@ -1,17 +1,17 @@
-export function SelectionSorter() {
+export function SelectionSorter(context) {
   let array;
   this.sortArray = async function () {
-    array = this.getArray();
+    array = context.getArray();
     for (let i = 0; i < array.length; i++) {
-      let res = await findMaxValue.call(this, i);
+      let res = await findMaxValue(i);
 
-      await this.swapAndDispatch(i, res);
+      await context.swapAndDispatch(i, res);
     }
   };
   let findMaxValue = async function (startIndex) {
     let maxIndex = startIndex;
     for (let i = startIndex; i < array.length; i++) {
-      if (await this.compareAndDispatch(i, maxIndex)) {
+      if (await context.compareAndDispatch(i, maxIndex)) {
         maxIndex = i;
       }
     }

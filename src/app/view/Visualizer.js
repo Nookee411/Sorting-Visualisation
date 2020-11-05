@@ -3,8 +3,8 @@ import { Timer, TimerEvents } from "./timer";
 export const colors = {
   unsorted: "cadetblue",
   sorted: "green",
-  swapped: "DeepPink",
-  scanned: "gray",
+  swapped: "purple",
+  scanned: "pink",
 };
 
 const elementIDs = {

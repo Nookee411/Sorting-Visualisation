@@ -1,5 +1,5 @@
-export function BubbleSorter() {
-  this.sortArray = async function (context) {
+export function BubbleSorter(context) {
+  this.sortArray = async function () {
     let array = context.getArray();
     for (let i = 0; i < array.length; i++) {
       for (let j = 0; j < array.length - i - 1; j++) {

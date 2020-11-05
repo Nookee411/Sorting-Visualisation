@@ -1,13 +1,7 @@
-import { max } from "moment";
 import { SorterFactory } from "../SortingAlgorithms/SorterFactory";
 import { sortEvent } from "./constants/sortEvent";
 import { sortingState } from "./constants/sortingState";
-import { BubbleSorter } from "./Sorter";
-
-const config = {
-  ComparisonTime: 20,
-  SwapTime: 100,
-};
+import { config } from "./config";
 
 export function SortManager(n, sortName) {
   let getRandomValue = function (min, max) {
@@ -79,21 +73,7 @@ export function SortManager(n, sortName) {
     let sorter = new SorterFactory(Object.assign(this, protectedMethods));
     let sortResult;
     this.state = sortingState.sorting;
-    let ctx = new BubbleSorter();
-    switch (currentSortName) {
-      // case "Merge":
-      //   sortResult = mergeSort(array, 0);
-      //   break;
-      // case "Quick":
-      //   sortResult = quickSort(0, array.length - 1);
-      //   break;
-      // case "Heap":
-      //   sortResult = heapSort();
-      //   break;
-      default:
-        sorter.applySort(currentSortName);
-        break;
-    }
+    sorter.applySort(currentSortName);
     // sortResult.then(() =>
     //   protectedMethods.dispatch(sortEvent.SortingFinished, {})
     // );

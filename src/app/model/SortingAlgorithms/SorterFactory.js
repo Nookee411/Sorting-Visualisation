@@ -17,22 +17,24 @@ export function SorterFactory(context) {
         sorter = new BubbleSorter(context);
         break;
       case "Insertion":
-        sorter = new InsertionSorter();
+        sorter = new InsertionSorter(context);
         break;
       case "Selection":
-        sorter = new SelectionSorter();
+        sorter = new SelectionSorter(context);
         break;
       case "Merge":
         sorter = new MergeSorter(context);
         break;
       case "Quick":
         sorter = new QuickSorter(context);
+        break;
       case "Heap":
         sorter = new HeapSorter(context);
+        break;
     }
-    sortResult = await sorter.sortArray.call(context);
-    console.log(sortResult);
-    // sortResult.then(() => context.dispatch(sortEvent.SortingFinished, {}));
+    sorter
+      .sortArray()
+      .then(() => context.dispatch(sortEvent.SortingFinished, {}));
     return sortResult;
   };
 }
